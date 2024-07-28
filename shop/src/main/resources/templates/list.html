@@ -4,17 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="/main.css" rel="stylesheet">
 </head>
 <body>
+
+  <div class="card" th:each="i : ${items}">
+    <img src="https://placehold.co/300">
     <div>
-        <img>
-        <h4 th:text="${name}">바지</h4>
-        <p>7억</p>
-      </div>
-      <div>
-        <img>
-        <h4>셔츠</h4>
-        <p>8억</p>
-      </div>
+      <h4 th:text="${i.ProductName}">바지</h4>
+      <p th:text="${i.Price}">7억</p>
+    </div>
+  </div>
+
+  <div class="post" th:each="j : ${infos}">
+    <h2 th:text="${j.Info_Date}">게시물 제목 1</h2>
+    <p th:text="${j.Info_Title}">2024-07-25</p>
+  </div>
+
 </body>
 </html>
