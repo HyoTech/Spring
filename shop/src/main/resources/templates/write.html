@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="/main.css" rel="stylesheet">
 </head>
 <body>
     <div th:replace="~{nav.html :: navbar}"></div> 
     
-    <h4>반갑습니다.</h4>
+    <form action="/add", method="POST">
+        <input name="title">
+        <input name="price">
+        <button type="submit">전송</button>
+    </form>
 </body>
 </html>
