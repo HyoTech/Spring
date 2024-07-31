@@ -3,11 +3,15 @@ package com.example.shop;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 import java.util.*;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 
 @Controller
 @RequiredArgsConstructor
@@ -44,4 +48,18 @@ public class ItemController {
         return "redirect:/list";
     }
 
+    // 상품상세페이지, 아이템 테이블의 ID컬럼을 이용하여 몇번째 상품인지 확인
+    // URL ID를 이용해서 items의 id에 맞게 상세페이지를 보여주기
+    @GetMapping("/detail/{id}")
+    String detail(@PathVariable long id, Model model) {
+        Optional<Item> result = itemRepository.findById(id);
+
+        if (result.isPresent()) {
+            model.addAttribute("ditem", result.get());
+            return "detail.html";
+        } else {
+            System.out.println("Item not found for id: " + id);
+            return "list.html";
+        }
+    }
 }

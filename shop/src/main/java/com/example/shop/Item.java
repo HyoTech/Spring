@@ -17,6 +17,10 @@ public class Item {
     private String ProductName;
     private Integer Price;
 
+    public long getID() {
+        return ID;
+    }
+
     public String getProductName() {
         return ProductName;
     }
