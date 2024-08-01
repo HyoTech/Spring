@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 @Controller
@@ -44,4 +45,17 @@ public class ItemController {
         itemService.showDetail(id, model);
         return "detail.html";
     }
+
+    @GetMapping("/modify/{id}")
+    public String modify(@PathVariable long id, Model model) {
+        itemService.modInfo(id, model);
+        return "modify.html";
+    }
+
+    @PostMapping("/mod/{id}")
+    String postModify(@PathVariable long id, @RequestParam String title, @RequestParam Integer price) {
+        itemService.modItem(id, title, price);
+        return "redirect:/list";
+    }
+
 }

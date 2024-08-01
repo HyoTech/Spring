@@ -14,6 +14,7 @@
     <div>
       <h4><a th:href="@{'detail/' + ${i.ID} }" th:text="${i.ProductName}">상품명</a></h4>
       <p th:text="${i.getPrice + '원'}">가격</p>
+      <a th:href="@{'modify/' + ${i.ID} }">✏️</a>
     </div>
   </div>
 
