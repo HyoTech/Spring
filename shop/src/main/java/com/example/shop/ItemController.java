@@ -1,8 +1,12 @@
 package com.example.shop;
 
+import java.util.Optional;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemService itemService;
+    private final ItemRepository itemRepository;
 
     // DB에 있는 상품명과 가격을 카드형태로 보여줌
     @GetMapping("/list")
@@ -56,6 +61,12 @@ public class ItemController {
     String postModify(@PathVariable long id, @RequestParam String title, @RequestParam Integer price) {
         itemService.modItem(id, title, price);
         return "redirect:/list";
+    }
+
+    @DeleteMapping("/del/{id}")
+    ResponseEntity<String> deleItem(@PathVariable Long id) {
+        itemService.DeItem(id);
+        return ResponseEntity.status(200).body("삭제완료");
     }
 
 }

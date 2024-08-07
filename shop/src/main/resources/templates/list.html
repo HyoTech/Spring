@@ -12,9 +12,11 @@
   <div class="card" th:each="i : ${items}">
     <img src="https://placehold.co/300">
     <div>
-      <h4><a th:href="@{'detail/' + ${i.ID} }" th:text="${i.ProductName}">상품명</a></h4>
-      <p th:text="${i.getPrice + '원'}">가격</p>
+      <h4><a class="PName" th:href="@{'detail/' + ${i.ID} }" th:text="${i.ProductName}">상품명</a></h4>
+      <p class = "ID" th:text="${i.getID}" display="none">아이디</p>
+      <p class = "Price" th:text="${i.getPrice + '원'}">가격</p>
       <a th:href="@{'modify/' + ${i.ID} }">✏️</a>
+      <button class="btn">🗑️</button>
     </div>
   </div>
 
@@ -23,5 +25,31 @@
     <p th:text="${j.Info_Title}">2024-07-25</p>
   </div>
 
+  <script>
+    //삭제 버튼 클릭 시 상품 ID를 넘겨주자
+    //어떤 버튼이 눌려졌는지 확인 하기위해 for문을 써서 버튼 구별
+    //카드내의 값을 가져오기 위해 아이디, 가격, 이름을 저장하는 변수를 만들고
+    //그 변수를 통해 ajax통신
+    var Card = document.querySelectorAll('.card');
+
+    for(let i = 0; i < Card.length; i++){
+    document.querySelectorAll('.btn')[i].addEventListener('click', function(){
+      var id = document.querySelectorAll('.ID')[i].textContent;
+
+      console.log(id);
+
+      fetch(`/del/${id}`, {
+        method: 'DELETE',
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
+      .then(r => r.text())
+      .then(result => {
+        window.location.reload();
+       })
+    });
+  }
+  </script>
 </body>
 </html>
