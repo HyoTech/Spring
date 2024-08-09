@@ -1,11 +1,14 @@
-package com.example.shop;
+package com.example.shop.Item;
 
 import java.util.*;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import com.example.shop.InfoRepository;
+import com.example.shop.Information;
 
 import lombok.RequiredArgsConstructor;
 
@@ -76,10 +79,12 @@ public class ItemService {
 
     }
 
+    // 상품삭제기능 ID를 통해 행삭제
     public void DeItem(@PathVariable Long id) {
         Optional<Item> item = itemRepository.findById(id);
         if (item.isPresent()) {
             itemRepository.deleteById(id);
         }
     }
+
 }
