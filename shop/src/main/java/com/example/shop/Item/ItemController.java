@@ -1,6 +1,4 @@
-package com.example.shop;
-
-import java.util.Optional;
+package com.example.shop.Item;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,14 +11,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 @Controller
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemService itemService;
-    private final ItemRepository itemRepository;
 
     // DB에 있는 상품명과 가격을 카드형태로 보여줌
     @GetMapping("/list")
@@ -68,5 +64,4 @@ public class ItemController {
         itemService.DeItem(id);
         return ResponseEntity.status(200).body("삭제완료");
     }
-
 }
