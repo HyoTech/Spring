@@ -13,8 +13,9 @@
     <img src="https://placehold.co/300">
     <div>
       <h4><a class="PName" th:href="@{'detail/' + ${i.ID} }" th:text="${i.ProductName}">상품명</a></h4>
-      <p class = "ID" th:text="${i.getID}" display="none">아이디</p>
+      <p class = "ID" th:text="${'상품번호' + i.getID}" display="none">아이디</p>
       <p class = "Price" th:text="${i.getPrice + '원'}">가격</p>
+      <p class = "Writer" th:text="${'작성자 : ' + i.getWriter}">작성자</p>
       <a th:href="@{'modify/' + ${i.ID} }">✏️</a>
       <button class="btn">🗑️</button>
     </div>

@@ -3,4 +3,9 @@
     <a href="/list">List</a>
     <a href="/write">Write</a>
     <a href="/UserInput">회원가입</a>
+
+    <div sec:authorize="isAuthenticated()">
+        <span sec:authentication="principal.username"></span>
+        <a href="/logout">로그아웃</a>
+    </div>
 </div>

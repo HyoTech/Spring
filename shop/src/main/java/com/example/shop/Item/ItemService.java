@@ -30,10 +30,11 @@ public class ItemService {
     }
 
     // 상품입력 기능
-    public void addItem(String title, Integer price) {
+    public void addItem(String title, Integer price, String writer) {
         Item newItem = new Item();
         newItem.setProductName(title);
         newItem.setPrice(price);
+        newItem.setWriter(writer);
         itemRepository.save(newItem);
     }
 

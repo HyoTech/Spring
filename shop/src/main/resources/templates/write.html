@@ -10,6 +10,7 @@
     <div th:replace="~{nav.html :: navbar}"></div> 
 
     <form action="/add", method="POST">
+        <input name="writer" th:value="${#authentication.name}" readonly> <!-- 사용자 이름을 폼 데이터에 포함 -->
         <input name="title">
         <input name="price">
         <button type="submit">전송</button>

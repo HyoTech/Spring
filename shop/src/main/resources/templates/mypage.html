@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+    <div>
+        <h4>마이페이지</h4>
+        <span sec:authentication="principal.username"></span>
+        <span sec:authentication="principal.authorities"></span>
+    </div>
+
+    <span sec:authorize="hasAuthority('일반유저')">일반유저</span>
+    <div sec:authorize="isAuthenticated()">
+        로그인된 일반유저
+    </div>
+</body>
+</html>

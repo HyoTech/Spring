@@ -16,6 +16,7 @@ public class Item {
     @Column(length = 200)
     private String ProductName;
     private Integer Price;
+    private String Writer;
 
     public long getID() {
         return ID;
@@ -29,6 +30,10 @@ public class Item {
         return Price;
     }
 
+    public String getWriter() {
+        return Writer;
+    }
+
     public void setProductName(String ProductName) {
         this.ProductName = ProductName;
     }
@@ -37,6 +42,9 @@ public class Item {
         this.Price = Price;
     }
 
+    public void setWriter(String Writer) {
+        this.Writer = Writer;
+    }
     /*
      * public void setAge(Integer Age) {
      * if (Age <= 100 && 0 <= Age) {

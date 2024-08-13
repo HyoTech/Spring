@@ -33,10 +33,9 @@ public class ItemController {
 
     // 상품입력 폼에서 작성한 상품 정보들을 서버로 보내주어 검사 후 DB에 저장
     @PostMapping("/add")
-    String postWrite(@RequestParam String title, @RequestParam Integer price) {
-        itemService.addItem(title, price);
+    String postWrite(@RequestParam String title, @RequestParam Integer price, @RequestParam String writer) {
+        itemService.addItem(title, price, writer);
         return "redirect:/list";
-
     }
 
     // 상품상세페이지, 아이템 테이블의 ID컬럼을 이용하여 몇번째 상품인지 확인

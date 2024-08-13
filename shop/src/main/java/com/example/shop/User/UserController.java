@@ -1,12 +1,13 @@
 package com.example.shop.User;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 @Controller
@@ -15,7 +16,10 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/UserInput")
-    public String UsrInputForm() {
+    public String UsrInputForm(Authentication auth) {
+        if (auth != null && auth.isAuthenticated()) {
+            return "redirect:/list";
+        }
         return "CreateUser.html";
     }
 
@@ -28,6 +32,14 @@ public class UserController {
     @GetMapping("/login")
     public String login() {
         return "login.html";
+    }
+
+    @GetMapping("/my-page")
+    public String mypage(Authentication auth) {
+        System.out.println(auth.isAuthenticated());
+        System.out.println(auth.getName());
+        System.out.println(auth.getAuthorities().contains(new SimpleGrantedAuthority("일반유저")));
+        return "mypage.html";
     }
 
 }
