@@ -13,18 +13,28 @@
     <img src="https://placehold.co/300">
     <div>
       <h4><a class="PName" th:href="@{'detail/' + ${i.ID} }" th:text="${i.ProductName}">상품명</a></h4>
-      <p class = "ID" th:text="${'상품번호' + i.getID}" display="none">아이디</p>
+      <p class = "ID" th:text="${i.getID}" display="none">아이디</p>
       <p class = "Price" th:text="${i.getPrice + '원'}">가격</p>
       <p class = "Writer" th:text="${'작성자 : ' + i.getWriter}">작성자</p>
       <a th:href="@{'modify/' + ${i.ID} }">✏️</a>
       <button class="btn">🗑️</button>
     </div>
   </div>
+  
+  <ul class="pagination">
+    <li th:if="${items.hasPrevious()}">
+        <a th:href="@{|/list/page/${currentPage - 1}|}">Previous</a>
+    </li>
+    
+    <li th:each="j : ${#numbers.sequence(1, items.totalPages)}"
+        th:classappend="${j == currentPage} ? 'active'">
+        <a th:href="@{|/list/page/${j}|}" th:text="${j}">1</a>
+    </li>
 
-  <div class="post" th:each="j : ${infos}">
-    <h2 th:text="${j.Info_Date}">게시물 제목 1</h2>
-    <p th:text="${j.Info_Title}">2024-07-25</p>
-  </div>
+    <li th:if="${items.hasNext()}">
+        <a th:href="@{|/list/page/${currentPage + 1}|}">Next</a>
+    </li>
+  </ul>
 
   <script>
     //삭제 버튼 클릭 시 상품 ID를 넘겨주자

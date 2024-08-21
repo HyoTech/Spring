@@ -1,11 +1,13 @@
 package com.example.shop.User;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.example.shop.User.MyUserDetailsService.CustomUser;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,10 +38,15 @@ public class UserController {
 
     @GetMapping("/my-page")
     public String mypage(Authentication auth) {
-        System.out.println(auth.isAuthenticated());
-        System.out.println(auth.getName());
-        System.out.println(auth.getAuthorities().contains(new SimpleGrantedAuthority("일반유저")));
+        CustomUser user = (CustomUser) auth.getPrincipal();
+        System.out.println(user.displayName);
         return "mypage.html";
+    }
+
+    @GetMapping("/user/1")
+    @ResponseBody
+    public UserDto getuser() {
+        return userService.DetailUser();
     }
 
 }

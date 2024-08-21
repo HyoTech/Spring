@@ -21,12 +21,20 @@ public class UserInfo {
         return userName;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getPassWord() {
         return passWord;
     }
 
     public String getDisplayName() {
         return displayName;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setUserName(String userName) {

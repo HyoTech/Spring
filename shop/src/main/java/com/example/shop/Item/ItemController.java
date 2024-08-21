@@ -1,5 +1,7 @@
 package com.example.shop.Item;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -17,12 +19,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemService itemService;
+    private final ItemRepository itemRepository;
 
     // DB에 있는 상품명과 가격을 카드형태로 보여줌
-    @GetMapping("/list")
-    String list(Model model) {
-        itemService.showList(model);
-        return "list.html";
+    /**
+     * @GetMapping("/list")
+     * String list(Model model) {
+     * itemService.showList(model);
+     * return "list.html";
+     * }
+     **/
+
+    // 공지사항 API
+    @GetMapping("/info")
+    public String showInfo(Model model) {
+        itemService.showInfoList(model);
+        return "info.html";
     }
 
     // 상품입력 폼으로 이동
@@ -35,32 +47,44 @@ public class ItemController {
     @PostMapping("/add")
     String postWrite(@RequestParam String title, @RequestParam Integer price, @RequestParam String writer) {
         itemService.addItem(title, price, writer);
-        return "redirect:/list";
+        return "redirect:/list/page/1";
     }
 
     // 상품상세페이지, 아이템 테이블의 ID컬럼을 이용하여 몇번째 상품인지 확인
     // URL ID를 이용해서 items의 id에 맞게 상세페이지를 보여주기
     @GetMapping("/detail/{id}")
-    String detail(@PathVariable long id, Model model) {
+    String detail(@PathVariable("id") long id, Model model) {
         itemService.showDetail(id, model);
         return "detail.html";
     }
 
-    @GetMapping("/modify/{id}")
-    public String modify(@PathVariable long id, Model model) {
+    // 상품 수정 관련 API
+    @GetMapping("/list/page/modify/{id}")
+    public String modify(@PathVariable("id") long id, Model model) {
         itemService.modInfo(id, model);
         return "modify.html";
     }
 
     @PostMapping("/mod/{id}")
-    String postModify(@PathVariable long id, @RequestParam String title, @RequestParam Integer price) {
+    String postModify(@PathVariable("id") long id, @RequestParam("title") String title,
+            @RequestParam("price") Integer price) {
         itemService.modItem(id, title, price);
-        return "redirect:/list";
+        return "redirect:/list/page/1";
     }
 
+    // 상품 삭제 API
     @DeleteMapping("/del/{id}")
-    ResponseEntity<String> deleItem(@PathVariable Long id) {
+    ResponseEntity<String> deleItem(@PathVariable("id") Long id) {
         itemService.DeItem(id);
         return ResponseEntity.status(200).body("삭제완료");
+    }
+
+    // DB에 있는 상품명과 가격을 카드형태로 보여줌, 페이징 기능
+    @GetMapping("/list/page/{id}")
+    String pagelist(Model model, @PathVariable("id") Integer id) {
+        Page<Item> result = itemRepository.findPageBy(PageRequest.of(id - 1, 5));
+        model.addAttribute("items", result);
+        model.addAttribute("currentPage", id);
+        return "list.html";
     }
 }

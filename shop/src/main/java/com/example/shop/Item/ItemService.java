@@ -21,11 +21,15 @@ public class ItemService {
     // 상품 보여주는 기능
     public void showList(Model model) {
         List<Item> ItemResult = itemRepository.findAll();
-        List<Information> InfoResult = infoRepository.findAll();
         // 1. 서버 API 함수의 파라미터에 Model model 넣고
         // 2. API안에서 model.addAttribute("작명", 전송할데이터)
         // 3. html 태그에 th:text="${작명}"
         model.addAttribute("items", ItemResult);
+    }
+
+    // 공지사항 보여주는 기능
+    public void showInfoList(Model model) {
+        List<Information> InfoResult = infoRepository.findAll();
         model.addAttribute("infos", InfoResult);
     }
 
@@ -39,7 +43,7 @@ public class ItemService {
     }
 
     // 상품 상세페이지 보여주기
-    public void showDetail(@PathVariable long id, Model model) {
+    public void showDetail(@PathVariable("id") long id, Model model) {
         Optional<Item> result = itemRepository.findById(id);
 
         if (result.isPresent()) {
@@ -51,7 +55,7 @@ public class ItemService {
     // 1, 리스트에서 수정 버튼 추가
     // 2, 수정 버튼 누를 시 수정 페이지로 이동
     // 3, 수정 버튼을 누른 상품의 아이디를 받아서 수정 페이지에서 정보 수정 시 맞는 행 찾아서 정보 업데이트
-    public void modInfo(@PathVariable long id, Model model) {
+    public void modInfo(@PathVariable("id") long id, Model model) {
         Optional<Item> result = itemRepository.findById(id);
 
         if (result.isPresent()) {
@@ -60,7 +64,7 @@ public class ItemService {
     }
 
     @Transactional
-    public void modItem(@PathVariable long id, String title, Integer price) {
+    public void modItem(@PathVariable("id") long id, String title, Integer price) {
         Item item = itemRepository.findById(id).orElseThrow(() -> {
             // IllegalArgumentException 예외 처리
             throw new IllegalArgumentException("해당하는 상품이 없습니다 id : " + id);
@@ -81,7 +85,7 @@ public class ItemService {
     }
 
     // 상품삭제기능 ID를 통해 행삭제
-    public void DeItem(@PathVariable Long id) {
+    public void DeItem(@PathVariable("id") Long id) {
         Optional<Item> item = itemRepository.findById(id);
         if (item.isPresent()) {
             itemRepository.deleteById(id);
