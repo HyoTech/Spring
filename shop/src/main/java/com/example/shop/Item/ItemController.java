@@ -1,5 +1,7 @@
 package com.example.shop.Item;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.example.shop.Comment.Comment;
+import com.example.shop.Comment.CommentRepository;
 
 @Service
 @Controller
@@ -20,15 +26,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ItemController {
     private final ItemService itemService;
     private final ItemRepository itemRepository;
-
-    // DB에 있는 상품명과 가격을 카드형태로 보여줌
-    /**
-     * @GetMapping("/list")
-     * String list(Model model) {
-     * itemService.showList(model);
-     * return "list.html";
-     * }
-     **/
+    private final S3Service s3Service;
+    private final CommentRepository commentRepository;
 
     // 공지사항 API
     @GetMapping("/info")
@@ -45,15 +44,18 @@ public class ItemController {
 
     // 상품입력 폼에서 작성한 상품 정보들을 서버로 보내주어 검사 후 DB에 저장
     @PostMapping("/add")
-    String postWrite(@RequestParam String title, @RequestParam Integer price, @RequestParam String writer) {
-        itemService.addItem(title, price, writer);
+    String postWrite(@RequestParam String title, @RequestParam Integer price, @RequestParam String writer,
+            @RequestParam String image) {
+        itemService.addItem(title, price, writer, image);
         return "redirect:/list/page/1";
     }
 
     // 상품상세페이지, 아이템 테이블의 ID컬럼을 이용하여 몇번째 상품인지 확인
     // URL ID를 이용해서 items의 id에 맞게 상세페이지를 보여주기
-    @GetMapping("/detail/{id}")
+    @GetMapping("/list/page/detail/{id}")
     String detail(@PathVariable("id") long id, Model model) {
+        List<Comment> commentResult = commentRepository.findByParentId(id);
+        model.addAttribute("comment", commentResult);
         itemService.showDetail(id, model);
         return "detail.html";
     }
@@ -87,4 +89,13 @@ public class ItemController {
         model.addAttribute("currentPage", id);
         return "list.html";
     }
+
+    // presigned-url 요청을 받으면 사용자 쪽으로 url을 전달해주는 API
+    @GetMapping("presigned-url")
+    @ResponseBody
+    String getURL(@RequestParam String filename) {
+        var result = s3Service.createPresignedUrl("test/" + filename);
+        return result;
+    }
+
 }

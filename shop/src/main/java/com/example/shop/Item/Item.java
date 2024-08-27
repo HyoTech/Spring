@@ -17,6 +17,7 @@ public class Item {
     private String ProductName;
     private Integer Price;
     private String Writer;
+    private String imgurl;
 
     public long getID() {
         return ID;
@@ -34,6 +35,10 @@ public class Item {
         return Writer;
     }
 
+    public String imgurl() {
+        return imgurl;
+    }
+
     public void setProductName(String ProductName) {
         this.ProductName = ProductName;
     }
@@ -45,17 +50,9 @@ public class Item {
     public void setWriter(String Writer) {
         this.Writer = Writer;
     }
-    /*
-     * public void setAge(Integer Age) {
-     * if (Age <= 100 && 0 <= Age) {
-     * this.Age = Age;
-     * } else {
-     * Age = Age;
-     * }
-     * }
-     * 
-     * public void PlusAge() {
-     * this.Age = Age + 1;
-     * }
-     */
+
+    public void setimgurl(String imgurl) {
+        this.imgurl = imgurl;
+    }
+
 }

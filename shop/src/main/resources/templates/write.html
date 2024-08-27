@@ -13,7 +13,32 @@
         <input name="writer" th:value="${#authentication.name}" readonly> <!-- 사용자 이름을 폼 데이터에 포함 -->
         <input name="title">
         <input name="price">
+        <input type="file" name="imagefile" onchange="getURL(this)">
+        <input type="hidden" name="image">
         <button type="submit">전송</button>
     </form>
+
+    <!--<input type="file" onchange="getURL(this)">--->
+    <img src="">
+
+    <script>
+        async function getURL(e){
+            let file = e.files[0]
+            let name = encodeURIComponent(file.name);
+            let result = await fetch('presigned-url?filename=' + name);
+            result = await result.text();
+            
+            let final_result = await fetch(result, {
+                method: 'PUT',
+                body: e.files[0]
+            })
+
+            if (final_result.ok) {
+                document.querySelector('img').src = final_result.url.split("?")[0]
+                document.querySelector('input[name="image"]').value = final_result.url.split("?")[0]
+            }
+            
+        }
+    </script>
 </body>
 </html>
