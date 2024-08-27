@@ -9,6 +9,11 @@
 <body>
   <div th:replace="~{nav.html :: navbar}"></div> 
 
+  <form action="/search" method="POST">
+    <input name="searchText" style="display:inline">
+    <button type="submit">검색</button>
+  </form> 
+
   <div class="card" th:each="i : ${items}">
     <img th:src="${i.imgurl}">
     <div>

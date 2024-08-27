@@ -19,7 +19,7 @@
     <div class="comments-list" id="commentsList" th:each="comment : ${comment}">
         <h2>Comments</h2>
         <!-- 댓글이 추가될 부분 -->
-        <p><strong th:text="${comment.getUsername}">Author</strong>:</p>
+        <p><strong th:text="${comment.getUsername}" style="display:inline">Author</strong>:</p>
         <p th:text="${comment.getContent}"></p>
     </div>
 
