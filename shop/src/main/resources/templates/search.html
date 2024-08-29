@@ -10,11 +10,11 @@
   <div th:replace="~{nav.html :: navbar}"></div> 
 
   <form action="/search" method="GET">
-    <input name="searchText" style="display:inline">
+    <input name="searchText" style="display:inline" th:value="${searchText}">
     <button type="submit">검색</button>
   </form> 
 
-  <div class="card" th:each="i : ${items}">
+  <div class="card" th:each="i : ${searchItem}">
     <img th:src="${i.imgurl}">
     <div>
       <h4><a class="PName" th:href="@{'detail/' + ${i.ID} }" th:text="${i.ProductName}">상품명</a></h4>
@@ -27,19 +27,22 @@
   </div>
   
   <ul class="pagination">
-    <li th:if="${items.hasPrevious()}">
-        <a th:href="@{|/list/page/${currentPage - 1}|}">Previous</a>
+    <!-- Previous button -->
+    <li th:if="${searchItem.hasPrevious()}">
+        <a th:href="@{|/search?searchText=${searchText}&page=${currentPage - 1}|}">Previous</a>
     </li>
     
-    <li th:each="j : ${#numbers.sequence(1, items.totalPages)}"
+    <!-- Page numbers -->
+    <li th:each="j : ${#numbers.sequence(0, searchItem.totalPages - 1)}"
         th:classappend="${j == currentPage} ? 'active'">
-        <a th:href="@{|/list/page/${j}|}" th:text="${j}">1</a>
+        <a th:href="@{|/search?searchText=${searchText}&page=${j}|}" th:text="${j + 1}">1</a>
     </li>
 
-    <li th:if="${items.hasNext()}">
-        <a th:href="@{|/list/page/${currentPage + 1}|}">Next</a>
+    <!-- Next button -->
+    <li th:if="${searchItem.hasNext()}">
+        <a th:href="@{|/search?searchText=${searchText}&page=${currentPage + 1}|}">Next</a>
     </li>
-  </ul>
+</ul>
 
   <script>
     //삭제 버튼 클릭 시 상품 ID를 넘겨주자
@@ -68,4 +71,4 @@
   }
   </script>
 </body>
-</html>
+</html> 

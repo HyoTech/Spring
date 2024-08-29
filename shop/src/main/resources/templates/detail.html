@@ -15,10 +15,8 @@
     <h4 th:text="${d.ProductName}">상세 상품명</h4>
     <p th:text="${d.getPrice}">가격</p>
 
-    <!-- Comment Form per item -->
+    <h2>댓글</h2>
     <div class="comments-list" id="commentsList" th:each="comment : ${comment}">
-        <h2>Comments</h2>
-        <!-- 댓글이 추가될 부분 -->
         <p><strong th:text="${comment.getUsername}" style="display:inline">Author</strong>:</p>
         <p th:text="${comment.getContent}"></p>
     </div>

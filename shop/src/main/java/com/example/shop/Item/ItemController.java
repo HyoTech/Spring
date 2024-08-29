@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -98,4 +99,13 @@ public class ItemController {
         return result;
     }
 
+    @GetMapping("/search")
+    String getSearch(Model model, @RequestParam String searchText, @RequestParam(defaultValue = "0") int page) {
+        Pageable Pageable = PageRequest.of(page, 5);
+        Page<Item> result = itemRepository.fullTextSearch(searchText, Pageable);
+        model.addAttribute("searchText", searchText);
+        model.addAttribute("searchItem", result);
+        model.addAttribute("currentPage", page);
+        return "search.html";
+    }
 }

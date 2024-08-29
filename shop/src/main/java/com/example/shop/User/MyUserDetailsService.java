@@ -53,7 +53,7 @@ public class MyUserDetailsService implements UserDetailsService {
                 String password,
                 Collection<? extends GrantedAuthority> authorities) {
             super(username, password, authorities);
-            // TODO Auto-generated constructor stub
+
         }
 
     }
