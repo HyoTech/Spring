@@ -1,15 +1,10 @@
 package com.example.shop.Item;
 
-<<<<<<< HEAD
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-=======
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
->>>>>>> c638f4723224459f81f45e8b8f8bb519460f7be8
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -21,13 +16,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-<<<<<<< HEAD
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.shop.Comment.Comment;
 import com.example.shop.Comment.CommentRepository;
-=======
->>>>>>> c638f4723224459f81f45e8b8f8bb519460f7be8
 
 @Service
 @Controller
@@ -35,20 +27,8 @@ import com.example.shop.Comment.CommentRepository;
 public class ItemController {
     private final ItemService itemService;
     private final ItemRepository itemRepository;
-<<<<<<< HEAD
     private final S3Service s3Service;
     private final CommentRepository commentRepository;
-=======
-
-    // DB에 있는 상품명과 가격을 카드형태로 보여줌
-    /**
-     * @GetMapping("/list")
-     * String list(Model model) {
-     * itemService.showList(model);
-     * return "list.html";
-     * }
-     **/
->>>>>>> c638f4723224459f81f45e8b8f8bb519460f7be8
 
     // 공지사항 API
     @GetMapping("/info")
@@ -65,28 +45,18 @@ public class ItemController {
 
     // 상품입력 폼에서 작성한 상품 정보들을 서버로 보내주어 검사 후 DB에 저장
     @PostMapping("/add")
-<<<<<<< HEAD
     String postWrite(@RequestParam String title, @RequestParam Integer price, @RequestParam String writer,
             @RequestParam String image) {
         itemService.addItem(title, price, writer, image);
-=======
-    String postWrite(@RequestParam String title, @RequestParam Integer price, @RequestParam String writer) {
-        itemService.addItem(title, price, writer);
->>>>>>> c638f4723224459f81f45e8b8f8bb519460f7be8
         return "redirect:/list/page/1";
     }
 
     // 상품상세페이지, 아이템 테이블의 ID컬럼을 이용하여 몇번째 상품인지 확인
     // URL ID를 이용해서 items의 id에 맞게 상세페이지를 보여주기
-<<<<<<< HEAD
     @GetMapping("/list/page/detail/{id}")
     String detail(@PathVariable("id") long id, Model model) {
         List<Comment> commentResult = commentRepository.findByParentId(id);
         model.addAttribute("comment", commentResult);
-=======
-    @GetMapping("/detail/{id}")
-    String detail(@PathVariable("id") long id, Model model) {
->>>>>>> c638f4723224459f81f45e8b8f8bb519460f7be8
         itemService.showDetail(id, model);
         return "detail.html";
     }
@@ -116,11 +86,11 @@ public class ItemController {
     @GetMapping("/list/page/{id}")
     String pagelist(Model model, @PathVariable("id") Integer id) {
         Page<Item> result = itemRepository.findPageBy(PageRequest.of(id - 1, 5));
+        System.out.println(result);
         model.addAttribute("items", result);
         model.addAttribute("currentPage", id);
         return "list.html";
     }
-<<<<<<< HEAD
 
     // presigned-url 요청을 받으면 사용자 쪽으로 url을 전달해주는 API
     @GetMapping("presigned-url")
@@ -139,6 +109,4 @@ public class ItemController {
         model.addAttribute("currentPage", page);
         return "search.html";
     }
-=======
->>>>>>> c638f4723224459f81f45e8b8f8bb519460f7be8
 }

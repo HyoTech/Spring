@@ -34,19 +34,12 @@ public class ItemService {
     }
 
     // 상품입력 기능
-<<<<<<< HEAD
     public void addItem(String title, Integer price, String writer, String image) {
-=======
-    public void addItem(String title, Integer price, String writer) {
->>>>>>> c638f4723224459f81f45e8b8f8bb519460f7be8
         Item newItem = new Item();
         newItem.setProductName(title);
         newItem.setPrice(price);
         newItem.setWriter(writer);
-<<<<<<< HEAD
-        newItem.setimgurl(image);
-=======
->>>>>>> c638f4723224459f81f45e8b8f8bb519460f7be8
+        newItem.setImgurl(image);
         itemRepository.save(newItem);
     }
 
