@@ -28,7 +28,11 @@ public class UserController {
     @PostMapping("/CreateUser")
     public String CreateUser(String username, String password, String name) throws Exception {
         userService.CrtUser(username, password, name);
+<<<<<<< HEAD
         return "redirect:/list/page/1";
+=======
+        return "redirect:/list";
+>>>>>>> c638f4723224459f81f45e8b8f8bb519460f7be8
     }
 
     @GetMapping("/login")

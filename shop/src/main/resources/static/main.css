@@ -170,6 +170,7 @@ input {
 .pagination a:hover {
     background-color: #0056b3;
     color: white;
+<<<<<<< HEAD
 }
 
 .container {
@@ -229,4 +230,6 @@ h1, h2 {
 
 .comment-form button:hover {
     background-color: #0056b3;
+=======
+>>>>>>> c638f4723224459f81f45e8b8f8bb519460f7be8
 }

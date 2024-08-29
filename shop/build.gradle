@@ -37,7 +37,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
 	implementation 'org.springframework.session:spring-session-jdbc'
+<<<<<<< HEAD
 	implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.1.1'
+=======
+>>>>>>> c638f4723224459f81f45e8b8f8bb519460f7be8
 }
 
 tasks.named('test') {
