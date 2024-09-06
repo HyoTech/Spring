@@ -86,7 +86,6 @@ public class ItemController {
     @GetMapping("/list/page/{id}")
     String pagelist(Model model, @PathVariable("id") Integer id) {
         Page<Item> result = itemRepository.findPageBy(PageRequest.of(id - 1, 5));
-        System.out.println(result);
         model.addAttribute("items", result);
         model.addAttribute("currentPage", id);
         return "list.html";

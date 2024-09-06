@@ -12,8 +12,15 @@
   <div class="detail" th:each="d : ${ditem}">
     <h4>상세페이지</h4>
     <img th:src="${d.imgurl}" alt="상품 이미지">
-    <h4 th:text="${d.ProductName}">상세 상품명</h4>
-    <p th:text="${d.getPrice}">가격</p>
+    <h4 th:text="${d.productName}">상세 상품명</h4>
+    <p th:text="${d.price}">가격</p>
+
+    <form action="/order" method="POST">
+      <input name="productName" th:value="${d.productName}">
+      <input name="Price" th:value="${d.price}">
+      <input name="Count" placeholder="count">
+      <button>주문하기</button>
+    </form>
 
     <h2>댓글</h2>
     <div class="comments-list" id="commentsList" th:each="comment : ${comment}">

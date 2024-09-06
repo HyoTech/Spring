@@ -1,11 +1,15 @@
 <div class="nav" th:fragment="navbar">
     <a class="logo">SpringMall</a>
-    <a href="/list/page/1">List</a>
+    <a href="/list/page/1">상품 목록</a>
     <a href="/info">공지사항</a>
-    <a href="/write">Write</a>
+
+    <div class="right">
     <a href="/UserInput">회원가입</a>
+    <a href="/login"><img src="/images/login-icon.jpg" alt="Login Icon" width="50" height="50"></a>
+    </div>
 
     <div sec:authorize="isAuthenticated()">
+        <a href="/write">상품 등록</a>
         <span sec:authentication="principal.username"></span>
         <a href="/logout">로그아웃</a>
     </div>

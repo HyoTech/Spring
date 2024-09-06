@@ -45,7 +45,7 @@ public class MyUserDetailsService implements UserDetailsService {
         return customUser;
     }
 
-    class CustomUser extends User {
+    public class CustomUser extends User {
         public long id;
         public String displayName;
 
