@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h4>주문 확인 페이지</h4>
+        <div class="post-list">
+            <div class="post" th:each="o : ${orders}">
+                <h2 class="title" th:text="'상품명: ' + ${o.productName}">제목</h2>
+                <p class="price" th:text="'가격: ' + ${o.price}">가격</p>
+                <p class="count" th:text="'수량: ' + ${o.count}">수량</p>
+                <p class="orderman" th:text="'주문자: ' + ${o.username}">작성자</p>
+                <p class="date" th:text="${o.createTime}">날짜</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
