@@ -35,7 +35,10 @@ public class MyUserDetailsService implements UserDetailsService {
         }
 
         // 유저 권한 메모
-        auth.add(new SimpleGrantedAuthority("일반유저"));
+        if (user.getUserName() == "highadmin") {
+            auth.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            System.out.println(auth);
+        }
 
         // customUser클래스의 데이터 받아오기
         CustomUser customUser = new CustomUser(user.getUserName(), user.getPassWord(), auth);

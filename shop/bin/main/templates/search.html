@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+  <div th:replace="~{nav.html :: navbar}"></div> 
+
+  <form action="/search" method="GET">
+    <input name="searchText" style="display:inline" th:value="${searchText}">
+    <button type="submit">검색</button>
+  </form> 
+
+  <div class="card" th:each="i : ${searchItem}">
+    <img th:src="${i.imgurl}">
+    <div>
+      <h4><a class="PName" th:href="@{'detail/' + ${i.ID} }" th:text="${i.ProductName}">상품명</a></h4>
+      <p class = "ID" th:text="${i.getID}" display="none">아이디</p>
+      <p class = "Price" th:text="${i.getPrice + '원'}">가격</p>
+      <p class = "Writer" th:text="${'작성자 : ' + i.getWriter}">작성자</p>
+      <a th:href="@{'modify/' + ${i.ID} }">✏️</a>
+      <button class="btn">🗑️</button>
+    </div>
+  </div>
+  
+  <ul class="pagination">
+    <!-- Previous button -->
+    <li th:if="${searchItem.hasPrevious()}">
+        <a th:href="@{|/search?searchText=${searchText}&page=${currentPage - 1}|}">Previous</a>
+    </li>
+    
+    <!-- Page numbers -->
+    <li th:each="j : ${#numbers.sequence(0, searchItem.totalPages - 1)}"
+        th:classappend="${j == currentPage} ? 'active'">
+        <a th:href="@{|/search?searchText=${searchText}&page=${j}|}" th:text="${j + 1}">1</a>
+    </li>
+
+    <!-- Next button -->
+    <li th:if="${searchItem.hasNext()}">
+        <a th:href="@{|/search?searchText=${searchText}&page=${currentPage + 1}|}">Next</a>
+    </li>
+</ul>
+
+  <script>
+    //삭제 버튼 클릭 시 상품 ID를 넘겨주자
+    //어떤 버튼이 눌려졌는지 확인 하기위해 for문을 써서 버튼 구별
+    //카드내의 값을 가져오기 위해 아이디, 가격, 이름을 저장하는 변수를 만들고
+    //그 변수를 통해 ajax통신
+    var Card = document.querySelectorAll('.card');
+
+    for(let i = 0; i < Card.length; i++){
+    document.querySelectorAll('.btn')[i].addEventListener('click', function(){
+      var id = document.querySelectorAll('.ID')[i].textContent;
+
+      console.log(id);
+
+      fetch(`/del/${id}`, {
+        method: 'DELETE',
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
+      .then(r => r.text())
+      .then(result => {
+        window.location.reload();
+       })
+    });
+  }
+  </script>
+</body>
+</html> 

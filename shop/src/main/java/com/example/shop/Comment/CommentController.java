@@ -14,7 +14,8 @@ public class CommentController {
     private final CommentRepository commentRepository;
 
     @PostMapping("/detail/comment")
-    public String postMethodName(@RequestParam String username, String comment, long parentid) {
+    public String postMethodName(@RequestParam("username") String username, @RequestParam("comment") String comment,
+            @RequestParam("parentid") long parentid) {
         Comment newComment = new Comment();
         newComment.setUsername(username);
         newComment.setContent(comment);

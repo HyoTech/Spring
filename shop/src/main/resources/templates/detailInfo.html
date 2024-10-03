@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+    <div th:replace="~{nav.html :: navbar}"></div>
+
+    <div class="notice-detail" th:each="dInfo : ${dInfo}">
+        <h1 class="notice-title" th:text="${dInfo.Info_Title}">공지사항 제목</h1>
+
+        <div class="notice-info">
+            <p>
+                <strong>작성자:</strong> <span th:text="${dInfo.Writer}">작성자 이름</span>
+            </p>
+            <p>
+                <strong>작성일:</strong> <span th:text="${dInfo.Info_Date}">작성일</span>
+            </p>
+        </div>
+
+        <div class="notice-content">
+            <p th:text="${dInfo.Info_Value}">공지사항 상세 내용</p>
+        </div>
+    </div>
+</body>
+</html>

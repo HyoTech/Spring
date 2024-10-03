@@ -1,9 +1,5 @@
 package com.example.shop.Sales;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -14,15 +10,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.shop.User.UserInfo;
-import com.example.shop.User.MyUserDetailsService.CustomUser;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RequiredArgsConstructor
 @Service
 @Controller
 public class OrdersController {
-    private final OrdersRepository ordersRepository;
     private final OrdersService ordersService;
 
     @PostMapping("/order")
@@ -35,8 +28,8 @@ public class OrdersController {
     }
 
     @GetMapping("/order/all")
-    public String getOrder(Authentication auth, Model model) {
-        ordersService.showOrders(auth, model);
+    public String getOrder(Model model) {
+        ordersService.showOrders(model);
         return "OrderPage.html";
     }
 }

@@ -1,43 +1,5 @@
-HELP.md
+# Ignore Gradle project-specific cache directory
 .gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-
-### VS Code ###
-.vscode/
-<<<<<<< HEAD
-# .gitignore 파일에 민감한 정보를 포함하는 파일 추가
-application.properties
-*.env
-=======
->>>>>>> c638f4723224459f81f45e8b8f8bb519460f7be8
+# Ignore Gradle build output directory
+build
