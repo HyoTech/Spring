@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+    <div th:replace="~{nav.html :: navbar}"></div>
+
+    <div class="container"></div>
+        <h1>글 작성하기</h1>
+        <form action="/SubmitInfo" method="POST">
+            <div class="form-group-inline">
+                <div class="form-group">
+                    <label for="title">제목:</label>
+                    <input type="text" id="InfoTitle" name="InfoTitle" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="author">작성자:</label>
+                    <input type="text" id="Writer" name="Writer" th:value="${#authentication.name}" readonly required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="content">글 내용:</label>
+                <textarea id="InfoValue" name="InfoValue" rows="8" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="text">날짜:</label>
+                <input type="text" id="InfoDate" name="InfoDate" required readonly>
+            </div>
+
+            <button class="upload" type="submit">글 올리기</button>
+        </form>
+    </div>
+
+    <script>
+        // 오늘 날짜로 기본값 설정
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('InfoDate').value = today;
+        });
+    </script>
+</body>
+</html>

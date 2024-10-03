@@ -1,21 +1,21 @@
 package com.example.shop;
 
-import java.time.ZonedDateTime;
-
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import com.example.shop.Item.ItemService;
+
+import lombok.RequiredArgsConstructor;
 
 @Controller
+@RequiredArgsConstructor
 public class BasicController {
-    @GetMapping("/")
-    String index() {
-        return "index.html";
-    }
+    private final ItemService itemService;
 
-    @GetMapping("/date")
-    @ResponseBody
-    String date() {
-        return ZonedDateTime.now().toString();
+    @GetMapping("/")
+    String index(Model model) {
+        itemService.showList(model);
+        itemService.showInfoList(model);
+        return "index.html";
     }
 }

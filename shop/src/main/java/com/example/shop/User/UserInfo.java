@@ -47,7 +47,7 @@ public class UserInfo {
         this.passWord = passWord;
     }
 
-    public void setDisplayName(String DisplayName) {
+    public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 }

@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.example.shop.InfoRepository;
-import com.example.shop.Information;
+import com.example.shop.Infomation.InfoRepository;
+import com.example.shop.Infomation.Information;
 
 import lombok.RequiredArgsConstructor;
 

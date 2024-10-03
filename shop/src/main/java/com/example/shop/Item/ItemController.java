@@ -45,8 +45,9 @@ public class ItemController {
 
     // 상품입력 폼에서 작성한 상품 정보들을 서버로 보내주어 검사 후 DB에 저장
     @PostMapping("/add")
-    String postWrite(@RequestParam String title, @RequestParam Integer price, @RequestParam String writer,
-            @RequestParam String image) {
+    String postWrite(@RequestParam("title") String title, @RequestParam("price") Integer price,
+            @RequestParam("writer") String writer,
+            @RequestParam("image") String image) {
         itemService.addItem(title, price, writer, image);
         return "redirect:/list/page/1";
     }
@@ -94,13 +95,14 @@ public class ItemController {
     // presigned-url 요청을 받으면 사용자 쪽으로 url을 전달해주는 API
     @GetMapping("presigned-url")
     @ResponseBody
-    String getURL(@RequestParam String filename) {
+    String getURL(@RequestParam("filename") String filename) {
         var result = s3Service.createPresignedUrl("test/" + filename);
         return result;
     }
 
     @GetMapping("/search")
-    String getSearch(Model model, @RequestParam String searchText, @RequestParam(defaultValue = "0") int page) {
+    String getSearch(Model model, @RequestParam("searchText") String searchText,
+            @RequestParam(defaultValue = "0") int page) {
         Pageable Pageable = PageRequest.of(page, 5);
         Page<Item> result = itemRepository.fullTextSearch(searchText, Pageable);
         model.addAttribute("searchText", searchText);
