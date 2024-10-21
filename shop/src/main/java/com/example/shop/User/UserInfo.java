@@ -18,6 +18,7 @@ public class UserInfo {
     private String userName;
     private String passWord;
     private String displayName;
+    private Integer authLevel;
 
     public String getUserName() {
         return userName;
@@ -35,6 +36,10 @@ public class UserInfo {
         return displayName;
     }
 
+    public Integer getAuthLevel() {
+        return authLevel;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -49,5 +54,9 @@ public class UserInfo {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public void setAuthLevel(Integer authLevel) {
+        this.authLevel = authLevel;
     }
 }

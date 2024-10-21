@@ -656,27 +656,12 @@ button:hover {
     align-items: center;
 }
 
-.post-title {
-    font-size: 1.5em;
-    margin: 0;
-}
-
-.post-author {
-    font-size: 0.9em;
-    color: #666;
-}
-
 .post-content-preview {
     margin-top: 10px;
     font-size: 1em;
     color: #333;
 }
 
-.post-date {
-    font-size: 0.8em;
-    color: #999;
-    margin-top: 5px;
-}
 
 /* 제목 스타일 */
 .notice-title {
@@ -701,4 +686,47 @@ button:hover {
 /* 내용 스타일 */
 .notice-content {
     white-space: pre-line; /* 줄바꿈 유지 */
+}
+
+select {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.right{
+    float: right;
+}
+
+.button-like {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;  /* 원하는 배경색 */
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.button-like:hover {
+    background-color: #0056b3;  /* 마우스 호버 시 배경색 */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
 }

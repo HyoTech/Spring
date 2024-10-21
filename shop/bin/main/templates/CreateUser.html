@@ -19,8 +19,27 @@
         <div>
             <input type="text" id="displayName" name="displayName" placeholder="이름" required>
         </div>
+        <div class="dropdown">
+            <label for="styledOptions">유저 타입 선택</label>
+            <select id="authLevel" name="authLevel">
+                <option value="1">관리자</option>
+                <option value="2">판매자</option>
+                <option value="3">일반유저</option>
+            </select>
+        </div>
         <button type="submit">가입하기</button>
     </form>
 </div>
+
+<script>
+    function toggleDropdown() {
+        var dropdown = document.getElementById("dropdown");
+        if (dropdown.style.display === "block") {
+            dropdown.style.display = "none";
+        } else {
+            dropdown.style.display = "block";
+        }
+    }
+</script>
 </body>
 </html>
