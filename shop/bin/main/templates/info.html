@@ -9,19 +9,28 @@
 <body>
     <div th:replace="~{nav.html :: navbar}"></div>
 
-    <div sec:authorize="isAuthenticated()">
-        <a href="/InfoWrite">글 작성</a>
+    <div class="right">
+        <div th:if="${userLevel != null and userLevel == 1}">
+            <a class="button-like" href="/InfoWrite" role="button">글 작성</a>
+        </div>
     </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>작성시간</th>
+            </tr>
+        </thead>
+    </table>
 
     <div class="post" th:each="j : ${infos}">
         <div class="post-header">
             <p class="ID" th:text="${j.Info_Id}" style="display: none;">아이디</p>
-            <h2>
-                <a class="post-title" th:href="@{'detailInfo/'+ ${j.Info_Id}}" th:text="${j.Info_Title}">게시물 제목</a>
-            </h2>
+            <a class="post-title" th:href="@{'detailInfo/'+ ${j.Info_Id}}" th:text="${j.Info_Title}">게시물 제목</a>
             <span class="post-author" th:text="${j.Writer}">작성자</span>
         </div>
-        <p class="post-content-preview" th:text="${j.Info_Value}">공지 내용 일부</p>
         <p class="post-date" th:text="${j.Info_Date}">게시물 일자</p>
     </div>
 </body>

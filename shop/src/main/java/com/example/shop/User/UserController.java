@@ -35,8 +35,9 @@ public class UserController {
     @PostMapping("/CreateUser")
     public String CreateUser(@RequestParam("userName") String userName,
             @RequestParam("password") String password,
-            @RequestParam("displayName") String displayName) throws Exception {
-        userService.CrtUser(userName, password, displayName);
+            @RequestParam("displayName") String displayName,
+            @RequestParam("authLevel") Integer authLevel) throws Exception {
+        userService.CrtUser(userName, password, displayName, authLevel);
         return "redirect:/list/page/1";
     }
 

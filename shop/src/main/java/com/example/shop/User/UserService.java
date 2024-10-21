@@ -16,7 +16,8 @@ public class UserService {
     // 회원가입기능, 폼에 입력된 데이터를 DB에 저장, 패스워드는 암호화
     public void CrtUser(@RequestParam("userName") String userName,
             @RequestParam("password") String password,
-            @RequestParam("displayName") String displayName) throws Exception {
+            @RequestParam("displayName") String displayName,
+            @RequestParam("authLevel") Integer authLevel) throws Exception {
         UserInfo userInfo = new UserInfo();
         var encoder = new BCryptPasswordEncoder();
         var result = userRepository.findByUserName(userName);
@@ -36,6 +37,7 @@ public class UserService {
         userInfo.setUserName(userName);
         userInfo.setPassWord(encoder.encode(password));
         userInfo.setDisplayName(displayName);
+        userInfo.setAuthLevel(authLevel);
         userRepository.save(userInfo);
 
     }

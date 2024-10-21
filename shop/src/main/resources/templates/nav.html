@@ -3,13 +3,15 @@
     <a href="/list/page/1">상품 목록</a>
     <a href="/info">공지사항</a>
 
-    <div sec:authorize="isAuthenticated()">
+    <div th:if="${userLevel != null and 2 >= userLevel}">
         <a href="/write">상품 등록</a>
         <a href="/order/all">주문 내역</a>
     </div>
 
     <div class="right">
-        <a href="/login"><img src="/images/login-icon.png" alt="Login Icon" width="50" height="50"></a>
+        <div th:if="${userLevel == null}">
+            <a href="/login"><img src="/images/login-icon.png" alt="Login Icon" width="50" height="50"></a>
+        </div>
     </div>
 
     <div sec:authorize="isAuthenticated()">
