@@ -9,29 +9,71 @@
 <body>
     <div th:replace="~{nav.html :: navbar}"></div>
 
+    <table>
+        <colgroup>
+            <col> <!-- 게시물 번호 -->
+            <col> <!-- 제목 -->
+            <col> <!-- 작성자 -->
+            <col> <!-- 작성시간 -->
+            <col> <!-- 조회수 -->
+        </colgroup>
+
+        <thead>
+            <tr>
+                <th>게시글 번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>작성시간</th>
+                <th>조회수</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr class="Info" th:each="j : ${infos}">
+                <td><p class="ID" th:text="${j.Info_Id}">아이디</p></td>
+                <td><a class="title" th:text="${j.Info_Title}">게시물 제목</a></td> <!-- fetch로 조회수 값 증가 후 상세페이지로 이동 -->
+                <td><span class="author" th:text="${j.Writer}">작성자</span></td>
+                <td><p class="date" th:text="${j.Info_Date}">게시물 일자</p></td>
+                <td><p class="view" th:text="${j.View}">조회수</p></td>
+            </tr>
+        </tbody>
+    </table>
+
     <div class="right">
         <div th:if="${userLevel != null and userLevel == 1}">
             <a class="button-like" href="/InfoWrite" role="button">글 작성</a>
         </div>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>제목</th>
-                <th>작성자</th>
-                <th>작성시간</th>
-            </tr>
-        </thead>
-    </table>
+    <script>
+    var info = document.querySelectorAll('.Info');
 
-    <div class="post" th:each="j : ${infos}">
-        <div class="post-header">
-            <p class="ID" th:text="${j.Info_Id}" style="display: none;">아이디</p>
-            <a class="post-title" th:href="@{'detailInfo/'+ ${j.Info_Id}}" th:text="${j.Info_Title}">게시물 제목</a>
-            <span class="post-author" th:text="${j.Writer}">작성자</span>
-        </div>
-        <p class="post-date" th:text="${j.Info_Date}">게시물 일자</p>
-    </div>
+    info.forEach((info, index) => {
+    var title = info.querySelector('.title');
+    var id = info.querySelector('.ID').textContent.trim();
+    var viewCount = parseInt(info.querySelector('.view').textContent, 10); // 현재 조회수
+
+    console.log(id)
+    console.log(viewCount)
+    title.addEventListener('click', function(e) {
+        e.preventDefault();
+        fetch(`/countClick/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    View: viewCount + 1 // 기존 조회수에서 1 증가
+                }),
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = `/detailInfo/${id}`; // 조회수 업데이트 후 상세페이지로 이동
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+    </script>
 </body>
 </html>

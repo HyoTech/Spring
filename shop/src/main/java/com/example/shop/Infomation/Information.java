@@ -19,4 +19,5 @@ public class Information {
     public String Info_Value;
     public String Writer;
     public String Info_Date;
+    public Integer View;
 }
