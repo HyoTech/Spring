@@ -12,13 +12,19 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final CustomAuthFailureHandler customAuthFailureHandler;
+
+    public SecurityConfig(CustomAuthFailureHandler customAuthFailureHandler) {
+        this.customAuthFailureHandler = customAuthFailureHandler;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf((csrf) -> csrf.disable());
         http.authorizeHttpRequests((authorize) -> authorize.requestMatchers("/**").permitAll());
         http.formLogin((formLogin) -> formLogin.loginPage("/login")
                 .defaultSuccessUrl("/")
-                .failureUrl("/fail"));
+                .failureHandler(customAuthFailureHandler));
         http.logout(logout -> logout.logoutUrl("/logout"));
         return http.build();
     }
