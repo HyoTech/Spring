@@ -33,7 +33,7 @@ public class InfoController {
         info.setWriter(Writer);
         info.setView(0);
         infoRepository.save(info);
-        return "Info.html";
+        return "redirect:/info";
     }
 
     @GetMapping("/detailInfo/{id}")

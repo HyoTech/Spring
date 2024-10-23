@@ -14,8 +14,8 @@
         <h1>공지사항</h1>
         <ul class="notice-list">
             <li th:each="j : ${infos}">
-                <h2 th:text="${j.Info_Date}">공지사항 제목</h2>
-                <p th:text="${j.Info_Title}">공지사항 내용</p>
+                <h2 th:text="${j.Info_Title}">공지사항 제목</h2>
+                <p th:text="${j.writer}">공지사항 내용</p>
             </li>
         </ul>
     </section>

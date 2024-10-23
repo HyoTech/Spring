@@ -24,6 +24,9 @@
                 <label for="password">비밀번호</label>
                 <input type="password" id="password" name="password" required>
             </div>
+            <div th:if="${session.errorMessage}" class="error-message">
+                <p th:text="${session.errorMessage}"></p> <!-- 에러 메시지 출력 -->
+            </div>
             <div class="form-actions">
                 <a href="/UserInput" class="signup-link">회원가입</a>
                 <button type="submit" class="login-btn">로그인</button>
