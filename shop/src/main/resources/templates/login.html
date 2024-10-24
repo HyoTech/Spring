@@ -9,10 +9,6 @@
 <body>
     <div th:replace="~{nav.html :: navbar}"></div> 
 
-    <div th:if="${param.error}">
-        <h4>아이디나 비번 틀림</h4>
-    </div>
-
     <div class="login-container">
         <h2>로그인</h2>
         <form action="/login" method="POST" class="login-form">

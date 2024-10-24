@@ -6,27 +6,58 @@
     <title>Document</title>
     <link href="/main.css" rel="stylesheet">
 </head>
+
 <body>
     <div th:replace="~{nav.html :: navbar}"></div>
 
-    <div class="notice-detail" th:each="dInfo : ${dInfo}">
+    <div class="notice-detail">
         <h1 class="notice-title" th:text="${dInfo.Info_Title}">공지사항 제목</h1>
 
-        <div class="notice-info">
-            <p>
-                <strong>작성자:</strong> <span th:text="${dInfo.Writer}">작성자 이름</span>
-            </p>
-            <p>
-                <strong>작성일:</strong> <span th:text="${dInfo.Info_Date}">작성일</span>
-            </p>
-            <p>
-                <strong>조회수:</strong> <span th:text="${dInfo.View}">작성일</span>
-            </p>
-        </div>
+        <table class="notice-info-table">
+            <tr>
+                <td>
+                    <strong>글번호:</strong> <span th:text="${dInfo.Info_Id}">글 번호</span>
+                </td>
+                <td>
+                    <strong>작성자:</strong> <span th:text="${dInfo.Writer}">작성자 이름</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>작성일:</strong> <span th:text="${dInfo.Info_Date}">작성일</span>
+                </td>
+                <td>
+                    <strong>조회수:</strong> <span th:text="${dInfo.View}">조회수</span>
+                </td>
+            </tr>
+        </table>
 
         <div class="notice-content">
             <p th:text="${dInfo.Info_Value}">공지사항 상세 내용</p>
         </div>
+
+        <div class="deleteInfo" th:if="${userLevel != null and userLevel == 1}">
+            <button class="deleteButton">삭제</button>
+        </div>
     </div>
+
+    <script>
+        var deleteBtn = document.querySelector('.deleteButton');
+        var id = document.querySelector('.notice-info span').textContent.trim(); // 글번호 가져오기
+
+        deleteBtn.addEventListener('click', function(e){
+            e.preventDefault();
+            fetch(`/deleteInfo/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type' : 'application/json',
+                }
+            })
+            .then(response => response.text())
+            .then(result => {
+                window.location.href = '/info';
+            });
+        });
+    </script>
 </body>
 </html>
