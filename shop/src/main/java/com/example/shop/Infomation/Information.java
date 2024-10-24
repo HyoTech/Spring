@@ -1,5 +1,6 @@
 package com.example.shop.Infomation;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +18,8 @@ public class Information {
 
     public String Info_Title;
     public String Info_Value;
+
+    @Column(name = "writer")
     public String Writer;
     public String Info_Date;
     public Integer View;
