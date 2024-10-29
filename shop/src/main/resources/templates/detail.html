@@ -32,7 +32,11 @@
     <h2>댓글</h2>
     <div class="comments-list">
         <div class="comment-item" th:each="comment : ${comment}">
-            <p><strong th:text="${comment.getUsername}">Author</strong>: <span th:text="${comment.getContent}"></span></p>
+            <p><strong th:text="${comment.getUsername}">작성자</strong>: <span th:text="${comment.getContent}"></span></p>
+            <div th:if="${comment.getUsername != null and comment.getUsername == #authentication.name}">
+                <button class="DelCommentButton">삭제</button>        
+            </div>
+            <p class="CID" th:text="${comment.getId}" style="display: none;">아이디</p>
         </div>
     </div>
 
@@ -55,7 +59,22 @@
 </div>
 
   <script>
-    console.log(document.getElementsByName('parentid').value);
+    var delButton = document.querySelector('.DelCommentButton');
+    var id = document.querySelector('.CID').textContent;
+
+    delButton.addEventListener('click', function(e){
+        e.preventDefault();
+        fetch(`/delComm/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type' : 'application/json',
+            }
+        })
+        .then(response => response.text())
+        .then(result => {
+             window.location.href = '/list';
+        });
+    })
   </script>
 </body>
 </html>

@@ -53,6 +53,7 @@ public class InfoController {
         return "detailInfo.html";
     }
 
+    // 조회수 관련 API
     @PostMapping("/countClick/{id}")
     ResponseEntity<String> plusViewCount(@PathVariable("id") long id, @RequestBody Map<String, Integer> body) {
         Optional<Information> result = infoRepository.findById(id);
@@ -67,6 +68,9 @@ public class InfoController {
         return ResponseEntity.status(200).body("Count");
     }
 
+    // 1, 글 삭제 버튼을 누르면 글 번호와 딜리트 요청을 서버로 보내줌
+    // 2, 삭제 조건 : 글이 존재할 것, 자신이 작성한 글일 것
+    // 3, 자신이 작성한 글인것을 판단할 조건 : 현재 로그인한 아이디와 작성자를 비교
     @DeleteMapping("/deleteInfo/{id}")
     ResponseEntity<String> delInfo(@PathVariable("id") long id,
             Authentication auth) {
