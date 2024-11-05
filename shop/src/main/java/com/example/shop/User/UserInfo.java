@@ -2,13 +2,22 @@ package com.example.shop.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
 @ToString
+@Getter
+@Setter
+@NoArgsConstructor
 public class UserInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,45 +27,28 @@ public class UserInfo {
     private String userName;
     private String passWord;
     private String displayName;
+    private String picture;
     private Integer authLevel;
+    private String email;
 
-    public String getUserName() {
-        return userName;
-    }
+    @Enumerated(EnumType.STRING) // Enum 타입은 문자열 형태로 저장해야 함
+    private Role role;
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getPassWord() {
-        return passWord;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public Integer getAuthLevel() {
-        return authLevel;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setUserName(String userName) {
+    @Builder
+    public UserInfo(String userName, String email, String picture, Role role) {
         this.userName = userName;
+        this.email = email;
+        this.picture = picture;
+        this.role = role;
     }
 
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
+    public UserInfo update(String name, String picture) {
+        this.userName = name;
+        this.picture = picture;
+        return this;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-    public void setAuthLevel(Integer authLevel) {
-        this.authLevel = authLevel;
+    public String getRoleKey() {
+        return this.role.getKey();
     }
 }

@@ -14,7 +14,7 @@ public class Item {
     // @Id = Public key 설정, GenerateValue = auto increment 기능/ 컬럼 생성
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long ID;
+    private long id;
 
     @Column(length = 200)
     private String productName;
@@ -23,7 +23,7 @@ public class Item {
     private String imgurl;
 
     public long getID() {
-        return ID;
+        return id;
     }
 
     public String getProductName() {

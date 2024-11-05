@@ -2,6 +2,7 @@ package com.example.shop.Item;
 
 import java.util.*;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -20,7 +21,8 @@ public class ItemService {
 
     // 상품 보여주는 기능
     public void showList(Model model) {
-        List<Item> ItemResult = itemRepository.findAll();
+        // 최근 등록된 상품부터 보여주기
+        List<Item> ItemResult = itemRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
         // 1. 서버 API 함수의 파라미터에 Model model 넣고
         // 2. API안에서 model.addAttribute("작명", 전송할데이터)
         // 3. html 태그에 th:text="${작명}"

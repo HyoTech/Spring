@@ -9,24 +9,13 @@
     </div>
 
     <div class="right">
-        <div th:if="${userLevel == null}">
+        <div th:if="${userLevel == null and ROLE == null}">
             <a href="/login"><img src="/images/login-icon.png" alt="Login Icon" width="50" height="50"></a>
         </div>
     </div>
 
     <div sec:authorize="isAuthenticated()">
-        <a href="/my-page" id="username" sec:authentication="principal.username"></a>
+        <a href="/my-page" id="username" th:text="${username}"></a>
         <a href="/logout">로그아웃</a>
     </div>
 </div>
-
-<script>
-    window.onload = function() {
-        const usernameElement = document.getElementById('username');
-        if (usernameElement) {
-            console.log("로그인된 사용자: " + usernameElement.textContent);
-        } else {
-            console.log("사용자가 로그인되지 않았습니다.");
-        }
-    }
-</script>

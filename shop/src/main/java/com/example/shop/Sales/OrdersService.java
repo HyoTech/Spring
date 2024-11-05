@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,11 +28,25 @@ public class OrdersService {
             @RequestParam("Price") Integer Price,
             Authentication auth) {
         Orders orders = new Orders();
-        CustomUser user = (CustomUser) auth.getPrincipal();
         UserInfo member = new UserInfo();
+        if (auth != null && auth.isAuthenticated()) {
+            Object principal = auth.getPrincipal();
+            Optional<UserInfo> userInfoOptional = Optional.empty();
+
+            if (principal instanceof CustomUser) {
+                // 커스텀 유저 로그인 사용자
+                CustomUser user = (CustomUser) principal;
+                member.setId(user.id);
+            } else if (principal instanceof OAuth2User) {
+                // OAuth2 로그인 사용자
+                OAuth2User oAuth2User = (OAuth2User) principal;
+                String email = oAuth2User.getAttribute("email"); // OAuth2 사용자의 이메일
+                userInfoOptional = userRepository.findByEmail(email);
+                member.setId(userInfoOptional.get().getId());
+            }
+        }
 
         if (Count != null && Price < 100000000) {
-            member.setId(user.id);
             orders.setProductName(productName);
             orders.setPrice(Price);
             orders.setCount(Count);
@@ -61,14 +76,28 @@ public class OrdersService {
     // 그럼 아이디를 어떻게 가져와야 할까?
     // findbymember 함수를 만들어서 현재 로그인한 아이디의 아이디 번호를 받아와서 조회
     public void myOrders(Model model, Authentication auth) {
-        CustomUser user = (CustomUser) auth.getPrincipal();
-        Optional<UserInfo> Uinfo = userRepository.findById(user.id);
+        if (auth != null && auth.isAuthenticated()) {
+            Object principal = auth.getPrincipal();
+            Optional<UserInfo> userInfoOptional = Optional.empty();
 
-        if (Uinfo.isPresent()) {
-            UserInfo result = Uinfo.get();
-            List<Orders> order = ordersRepository.findByMember(result);
+            if (principal instanceof CustomUser) {
+                // 커스텀 유저 로그인 사용자
+                CustomUser user = (CustomUser) principal;
+                userInfoOptional = userRepository.findByUserName(user.getUsername());
 
-            model.addAttribute("orders", order);
+            } else if (principal instanceof OAuth2User) {
+                // OAuth2 로그인 사용자
+                OAuth2User oAuth2User = (OAuth2User) principal;
+                String email = oAuth2User.getAttribute("email"); // OAuth2 사용자의 이메일
+                userInfoOptional = userRepository.findByEmail(email);
+            }
+
+            if (userInfoOptional.isPresent()) {
+                UserInfo userInfo = userInfoOptional.get();
+                List<Orders> orders = ordersRepository.findByMember(userInfo);
+
+                model.addAttribute("orders", orders);
+            }
         }
     }
 
