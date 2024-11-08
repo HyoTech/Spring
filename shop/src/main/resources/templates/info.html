@@ -30,8 +30,8 @@
 
         <tbody>
             <tr class="Info" th:each="j : ${infos}">
-                <td><p class="ID" th:text="${j.Info_Id}">아이디</p></td>
-                <td><a class="title" th:text="${j.Info_Title}">게시물 제목</a></td> <!-- fetch로 조회수 값 증가 후 상세페이지로 이동 -->
+                <td><p class="ID" th:text="${j.Id}">아이디</p></td>
+                <td><a class="title" th:text="${j.Info_Title}">게시물 제목</a></td> 
                 <td><span class="author" th:text="${j.Writer}">작성자</span></td>
                 <td><p class="date" th:text="${j.Info_Date}">게시물 일자</p></td>
                 <td><p class="view" th:text="${j.View}">조회수</p></td>

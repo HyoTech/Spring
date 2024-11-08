@@ -1,6 +1,7 @@
 package com.example.shop.Item;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import org.springframework.security.core.Authentication;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,8 +49,11 @@ public class ItemController {
     @PostMapping("/add")
     String postWrite(@RequestParam("title") String title, @RequestParam("price") Integer price,
             @RequestParam("writer") String writer,
-            @RequestParam("image") String image) {
-        itemService.addItem(title, price, writer, image);
+            @RequestParam("image") String image,
+            Authentication auth) {
+        if (auth.isAuthenticated()) {
+            itemService.addItem(title, price, writer, image);
+        }
         return "redirect:/list/page/1";
     }
 
@@ -57,7 +62,19 @@ public class ItemController {
     @GetMapping("/list/page/detail/{id}")
     String detail(@PathVariable("id") long id, Model model) {
         List<Comment> commentResult = commentRepository.findByParentId(id);
-        model.addAttribute("comment", commentResult);
+
+        if (!commentResult.isEmpty()) {
+            List<Comment> filteredComments = commentResult.stream()
+                    .filter(comment -> comment.getParentCategory() == 1)
+                    .collect(Collectors.toList());
+
+            if (!filteredComments.isEmpty()) {
+                model.addAttribute("comment", filteredComments);
+            }
+        } else {
+            model.addAttribute("comment", null);
+        }
+
         itemService.showDetail(id, model);
         return "detail.html";
     }
@@ -71,8 +88,9 @@ public class ItemController {
 
     @PostMapping("/mod/{id}")
     String postModify(@PathVariable("id") long id, @RequestParam("title") String title,
-            @RequestParam("price") Integer price) {
-        itemService.modItem(id, title, price);
+            @RequestParam("price") Integer price,
+            @RequestParam("image") String image) {
+        itemService.modItem(id, title, price, image);
         return "redirect:/list/page/1";
     }
 
@@ -110,4 +128,5 @@ public class ItemController {
         model.addAttribute("currentPage", page);
         return "search.html";
     }
+
 }

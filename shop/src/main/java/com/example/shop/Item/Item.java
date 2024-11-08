@@ -7,9 +7,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(indexes = @Index(name = "pName", columnList = "productName"))
+@Getter
+@Setter
 public class Item {
     // @Id = Public key 설정, GenerateValue = auto increment 기능/ 컬럼 생성
     @Id
@@ -22,39 +26,4 @@ public class Item {
     private String writer;
     private String imgurl;
 
-    public long getID() {
-        return id;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public String getWriter() {
-        return writer;
-    }
-
-    public String getImgurl() {
-        return imgurl;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public void setWriter(String writer) {
-        this.writer = writer;
-    }
-
-    public void setImgurl(String imgurl) {
-        this.imgurl = imgurl;
-    }
 }

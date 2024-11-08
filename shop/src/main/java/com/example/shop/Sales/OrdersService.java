@@ -48,8 +48,8 @@ public class OrdersService {
 
         if (Count != null && Price < 100000000) {
             orders.setProductName(productName);
-            orders.setPrice(Price);
             orders.setCount(Count);
+            orders.setPrice(Price * Count);
             orders.setMember(member);
         }
         ordersRepository.save(orders);

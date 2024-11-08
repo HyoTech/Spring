@@ -14,7 +14,7 @@
     
     <!-- 상품 정보와 구매 폼을 하나의 섹션으로 감싸기 -->
     <div class="product-details">
-      <img th:src="${d.imgurl}" alt="상품 이미지">
+      <img th:src="${d.imgurl}" alt="상품 이미지" onerror="this.onerror=null; this.src='/images/basicimage.png';">
         <h3 th:text="${d.productName}">상세 상품명</h3>
         <p>가격: <span th:text="${d.price}">가격</span> 원</p>
 
@@ -22,13 +22,14 @@
         <form class="order-form" action="/order" method="POST">
             <input type="hidden" name="productName" th:value="${d.productName}">
             <input type="hidden" name="Price" th:value="${d.price}">
-            <label for="Count">수량: </label>
-            <input id="Count" name="Count" type="number" placeholder="count" required>
+            <div class="order-item">
+                <label for="Count">수량: </label> 
+                <input id="Count" name="Count" type="number" placeholder="count" required>
+            </div>
             <button class="buy-btn" type="submit">구매하기</button>
         </form>
-    </div>
 
-    <!-- 댓글 섹션 -->
+        <!-- 댓글 섹션 -->
     <h2>댓글</h2>
     <div class="comments-list">
         <div class="comment-item" th:each="comment : ${comment}">
@@ -47,8 +48,9 @@
             <form action="/detail/comment" method="post">
                 <div class="form-group">
                     <label for="author">작성자:</label>
-                    <input type="text" id="username" name="username" th:value="${#authentication.name}" readonly>
-                    <input type="hidden" name="parentid" th:value="${d.getID()}">
+                    <input type="text" id="username" name="username" th:value="${username}" readonly>
+                    <input type="hidden" name="parentid" th:value="${d.getId()}">
+                    <input type="hidden" name="parentcategory" th:value="1">
                 </div>
                 <div class="form-group">
                     <label for="comment">댓글:</label>
@@ -57,6 +59,7 @@
                 <button class="submit-btn" type="submit">댓글 작성</button>
             </form>
         </div>
+    </div>
     </div>
 </div>
 

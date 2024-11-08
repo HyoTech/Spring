@@ -1,6 +1,7 @@
 package com.example.shop.Infomation;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -16,12 +17,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.shop.Comment.Comment;
+import com.example.shop.Comment.CommentRepository;
 import com.example.shop.User.MyUserDetailsService.CustomUser;
 
 @Controller
 @RequiredArgsConstructor
 public class InfoController {
     private final InfoRepository infoRepository;
+    private final CommentRepository commentRepository;
 
     @GetMapping("/InfoWrite")
     public String InfoWrite() {
@@ -45,11 +49,26 @@ public class InfoController {
     @GetMapping("/detailInfo/{id}")
     public String detailInfo(@PathVariable("id") long id, Model model) {
         Optional<Information> Result = infoRepository.findById(id);
+        List<Comment> commentResult = commentRepository.findByParentId(id);
 
-        System.out.println(Result.get());
         if (Result.isPresent()) {
             model.addAttribute("dInfo", Result.get());
         }
+
+        // 공지사항의 경우 카테고리로 공지사항인지 아닌지 판단 후 공지사항인 경우에만 R기능 수행
+        // 상품의 경우도 마찬가지 category만 바꿔주면 됨(동일 테이블 사용)
+        if (!commentResult.isEmpty()) {
+            List<Comment> filteredComments = commentResult.stream()
+                    .filter(comment -> comment.getParentCategory() == 2)
+                    .collect(Collectors.toList());
+
+            if (!filteredComments.isEmpty()) {
+                model.addAttribute("comment", filteredComments);
+            }
+        } else {
+            model.addAttribute("comment", null);
+        }
+
         return "detailInfo.html";
     }
 

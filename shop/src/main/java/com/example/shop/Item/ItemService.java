@@ -67,7 +67,7 @@ public class ItemService {
     }
 
     @Transactional
-    public void modItem(@PathVariable("id") long id, String title, Integer price) {
+    public void modItem(@PathVariable("id") long id, String title, Integer price, String image) {
         Item item = itemRepository.findById(id).orElseThrow(() -> {
             // IllegalArgumentException 예외 처리
             throw new IllegalArgumentException("해당하는 상품이 없습니다 id : " + id);
@@ -85,6 +85,7 @@ public class ItemService {
             System.out.println("유효하지 않은 가격입니다.");
         }
 
+        item.setImgurl(image);
     }
 
     // 상품삭제기능 ID를 통해 행삭제

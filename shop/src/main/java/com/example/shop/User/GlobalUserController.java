@@ -59,7 +59,7 @@ public class GlobalUserController {
             Object principal = authentication.getPrincipal();
 
             if (principal instanceof OAuth2User) {
-                return ((OAuth2User) principal).getAttribute("email"); // OAuth2 사용자라면 email 속성 사용
+                return ((OAuth2User) principal).getAttribute("name"); // OAuth2 사용자라면 name 속성 사용
             } else if (principal instanceof CustomUser) {
                 return ((CustomUser) principal).getUsername(); // 일반 사용자라면 username 속성 사용
             }

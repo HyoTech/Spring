@@ -35,9 +35,10 @@ public class UserInfo {
     private Role role;
 
     @Builder
-    public UserInfo(String userName, String email, String picture, Role role) {
+    public UserInfo(String userName, String email, String picture, Role role, String displayName) {
         this.userName = userName;
         this.email = email;
+        this.displayName = displayName;
         this.picture = picture;
         this.role = role;
     }

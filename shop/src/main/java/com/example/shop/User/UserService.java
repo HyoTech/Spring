@@ -41,17 +41,4 @@ public class UserService {
         userRepository.save(userInfo);
 
     }
-
-    // 유저 상세페이지
-    public UserDto DetailUser() {
-        var a = userRepository.findById(1L);
-        var result = a.get();
-        var userDto = new UserDto(result.getUserName(), result.getDisplayName());
-
-        if (a.isPresent()) {
-            return userDto;
-        } else {
-            throw new RuntimeException("User not found"); // 예외 처리
-        }
-    }
 }

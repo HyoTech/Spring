@@ -15,16 +15,16 @@
   </form> 
 
     <div class="card" th:each="i : ${items}">
-      <img th:src="${i.imgurl}" alt="Product Image">
+      <img th:src="${i.imgurl}" alt="Product Image" onerror="this.onerror=null; this.src='/images/basicimage.png';">
       <div>
           <h4>
-            <a class="productName" th:href="@{'detail/' + ${i.ID}}" th:text="${i.productName}">상품명</a>
+            <a class="productName" th:href="@{'detail/' + ${i.id}}" th:text="${i.productName}">상품명</a>
           </h4>
-          <p class="ID" th:text="${i.ID}" style="display: none;">아이디</p>
+          <p class="ID" th:text="${i.id}" style="display: none;">아이디</p>
           <p class="Price" th:text="${i.price + '원'}">가격</p>
           <p class="Writer" th:text="'작성자 : ' + ${i.writer}">작성자</p>
           <div th:if="${userLevel != null and 2 >= userLevel}">
-            <a th:href="@{'modify/' + ${i.ID}}">✏️</a>
+            <a th:href="@{'modify/' + ${i.id}}">✏️</a>
             <button class="btn">🗑️</button>
           </div>  
       </div>

@@ -4,8 +4,8 @@
     <a href="/info">공지사항</a>
 
     <div th:if="${userLevel != null and 2 >= userLevel}">
-        <a href="/write">상품 등록</a>
         <a href="/order/all">주문 내역</a>
+        <a href="/write">상품 등록</a>
     </div>
 
     <div class="right">

@@ -38,7 +38,7 @@ public class SecurityConfig {
                 // OAuth2 로그인 설정
                 http.oauth2Login(oauth2 -> oauth2
                                 .loginPage("/login")
-                                .defaultSuccessUrl("/", true) // 로그인 성공 후 이동할 URL 설정
+                                .defaultSuccessUrl("/", true)
                                 .failureUrl("/error")
                                 .userInfoEndpoint(userInfo -> userInfo
                                                 .userService(customOAuth2UserService)));

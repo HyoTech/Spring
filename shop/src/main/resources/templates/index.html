@@ -14,28 +14,32 @@
         <h1>공지사항</h1>
         <ul class="notice-list">
             <li th:each="j : ${infos}">
-                <h2 th:text="${j.Info_Title}">공지사항 제목</h2>
-                <p th:text="${j.writer}">공지사항 내용</p>
+                <a th:text="${j.Info_Title}" th:href="@{'detailInfo/' + ${j.id}}">공지사항 제목</a>
+                <p th:text="${j.writer}">공지사항 작성자</p>
             </li>
         </ul>
     </section>
 
     <!-- 상품 목록 섹션 -->
     <section class="product-section">
-        <h1>상품 목록</h1>
+        <div class="section-header">
+            <h1>최근 등록 상품</h1>
+            <a class="view-all" th:href="@{'list/page/1'}">상품 더보기</a>
+        </div>
         <ul class="product-list">
-            <li th:each="i : ${items}" class="product-item">
-                <div class="product-info">
-                    <img th:src="${i.imgurl}" alt="Product Image" width="300" height="200">
-                    <h3 th:text="${i.productName}">상품명</h3>
-                    <p th:text="${i.price} + ' 원'">가격</p>
-                </div>
-                <div class="product-actions">
-                    <a class="buy-btn" th:href="@{'list/page/detail/' + ${i.ID}}">구매하기</a>
+            <li th:each="r : ${rank}" class="product-item">
+                <div class="product-card">
+                    <img th:src="${r.imgurl}" alt="Product Image" class="product-image" onerror="this.onerror=null; this.src='/images/basicimage.png';">
+                    <div class="product-info">
+                        <h3 class="product-name" th:text="${r.productName}">상품명</h3>
+                        <p class="product-price" th:text="${r.price} + ' 원'">가격</p>
+                    </div>
+                    <div class="product-actions">
+                        <a class="buy-btn" th:href="@{'list/page/detail/' + ${r.id}}">구매하기</a>
+                    </div>
                 </div>
             </li>
         </ul>
     </section>
-
 </body>
 </html>
