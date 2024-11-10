@@ -1,6 +1,7 @@
 package com.example.shop.Item;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.security.core.Authentication;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -59,6 +62,7 @@ public class ItemController {
 
     // 상품상세페이지, 아이템 테이블의 ID컬럼을 이용하여 몇번째 상품인지 확인
     // URL ID를 이용해서 items의 id에 맞게 상세페이지를 보여주기
+    // 코멘트 테이블을 공지사항, 물품리스트 두 테이블이 같이 사용하고 있기때문에 구분 코드 추가(ParentID 겹칠것을 우려)
     @GetMapping("/list/page/detail/{id}")
     String detail(@PathVariable("id") long id, Model model) {
         List<Comment> commentResult = commentRepository.findByParentId(id);
@@ -89,16 +93,28 @@ public class ItemController {
     @PostMapping("/mod/{id}")
     String postModify(@PathVariable("id") long id, @RequestParam("title") String title,
             @RequestParam("price") Integer price,
-            @RequestParam("image") String image) {
-        itemService.modItem(id, title, price, image);
+            @RequestParam("image") String image,
+            @RequestParam("oldImageUrl") String oldImageUrl) {
+        itemService.modItem(id, title, price, image, oldImageUrl);
         return "redirect:/list/page/1";
     }
 
     // 상품 삭제 API
     @DeleteMapping("/del/{id}")
-    ResponseEntity<String> deleItem(@PathVariable("id") Long id) {
-        itemService.DeItem(id);
-        return ResponseEntity.status(200).body("삭제완료");
+    ResponseEntity<String> deleItem(@PathVariable("id") Long id, @RequestBody Map<String, String> body) {
+        String objectKey = body.get("ObjectKey");
+
+        if (objectKey == null) {
+            return ResponseEntity.status(400).body("ObjectKey가 없습니다.");
+        }
+
+        try {
+            itemService.DeItem(id);
+            s3Service.deleteFileFromS3(objectKey);
+            return ResponseEntity.status(200).body("삭제 완료");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("삭제 중 오류 발생: " + e.getMessage());
+        }
     }
 
     // DB에 있는 상품명과 가격을 카드형태로 보여줌, 페이징 기능

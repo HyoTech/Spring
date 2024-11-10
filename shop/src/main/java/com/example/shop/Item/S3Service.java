@@ -1,6 +1,5 @@
 package com.example.shop.Item;
 
-import java.io.IOException;
 import java.time.Duration;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +19,7 @@ public class S3Service {
     @Value("${spring.cloud.aws.s3.bucket}")
     private String bucket;
     private final S3Presigner s3Presigner;
+    private final S3Client s3Client;
 
     String createPresignedUrl(String path) {
         var putObjectRequest = PutObjectRequest.builder()
@@ -33,17 +33,24 @@ public class S3Service {
         return s3Presigner.presignPutObject(preSignRequest).url().toString();
     }
 
-    public void deleteFileFromS3(S3Client s3, String objectKey) {
+    public void deleteFileFromS3(String objectKey) {
         try {
             DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
                     .bucket(bucket)
                     .key(objectKey)
                     .build();
-            s3.deleteObject(deleteRequest);
+            s3Client.deleteObject(deleteRequest);
             System.out.println("파일 삭제 완료: " + objectKey);
 
         } catch (S3Exception e) {
             System.err.println("파일 삭제 실패: " + e.awsErrorDetails().errorMessage());
         }
+    }
+
+    public void updateFileIn3(String oldObjectKey, String path) {
+        if (oldObjectKey != null) {
+            deleteFileFromS3(oldObjectKey);
+        }
+        createPresignedUrl(path);
     }
 }

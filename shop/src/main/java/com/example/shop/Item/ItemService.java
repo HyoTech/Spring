@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class ItemService {
     private final ItemRepository itemRepository;
     private final InfoRepository infoRepository;
+    private final S3Service s3Service;
 
     // 상품 보여주는 기능
     public void showList(Model model) {
@@ -66,8 +67,14 @@ public class ItemService {
         }
     }
 
+    // 1, 기존에 사용하던 aws 사진 경로에 있던 사진을 삭제 후
+    // 2, 저장을 하는게 이후 관리에 도움이될 것 같다
+    // 3, deleteFileFromS3 -> createPresignedUrl
     @Transactional
-    public void modItem(@PathVariable("id") long id, String title, Integer price, String image) {
+    public void modItem(@PathVariable("id") long id, String title, Integer price, String image, String oldImageUrl) {
+        String[] oldUrl = oldImageUrl.split("com/");
+        String resultUrl = oldUrl.length > 1 ? oldUrl[1] : ""; // 예외처리
+
         Item item = itemRepository.findById(id).orElseThrow(() -> {
             // IllegalArgumentException 예외 처리
             throw new IllegalArgumentException("해당하는 상품이 없습니다 id : " + id);
@@ -85,6 +92,9 @@ public class ItemService {
             System.out.println("유효하지 않은 가격입니다.");
         }
 
+        if (!oldImageUrl.isEmpty()) {
+            s3Service.updateFileIn3(resultUrl, image);
+        }
         item.setImgurl(image);
     }
 

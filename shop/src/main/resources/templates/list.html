@@ -15,7 +15,7 @@
   </form> 
 
     <div class="card" th:each="i : ${items}">
-      <img th:src="${i.imgurl}" alt="Product Image" onerror="this.onerror=null; this.src='/images/basicimage.png';">
+      <img class="imgurl" th:src="${i.imgurl}" alt="Product Image" onerror="this.onerror=null; this.src='/images/basicimage.png';">
       <div>
           <h4>
             <a class="productName" th:href="@{'detail/' + ${i.id}}" th:text="${i.productName}">상품명</a>
@@ -54,8 +54,11 @@
     var cards = document.querySelectorAll('.card');
 
     cards.forEach((card, index) => {
+      var imgurl = card.querySelector('.imgurl').getAttribute('src');
       var deleteBtn = card.querySelector('.btn');
       var id = card.querySelector('.ID').textContent;
+
+      var objectKey = imgurl.split(".com/")[1]; 
 
       // 삭제 버튼 클릭 이벤트 리스너
       deleteBtn.addEventListener('click', function(e) {
@@ -64,7 +67,10 @@
           method: 'DELETE',
           headers: {
             "Content-Type": "application/json"
-          }
+          },
+          body : JSON.stringify({
+            ObjectKey: objectKey
+          }),
         })
         .then(response => response.text())
         .then(result => {

@@ -13,7 +13,7 @@
         <input name="writer" th:value="${#authentication.name}" readonly>
         <input name="title" th:value="${mitem.productName}">
         <input name="price" th:value="${mitem.price}">
-        <input type="hidden" th:value="${mitem.imgurl}">
+        <input type="hidden" name="oldImageUrl" th:value="${mitem.imgurl}"/>
         <input type="file" name="imagefile" onchange="getURL(this)">
         <input type="hidden" name="image">
         <button type="submit">수정</button>
@@ -23,7 +23,7 @@
         async function getURL(e){
             let file = e.files[0]
             let name = encodeURIComponent(file.name);
-            let result = await fetch('presigned-url?filename=' + name);
+            let result = await fetch('/presigned-url?filename=' + name);
             result = await result.text();
             
             let final_result = await fetch(result, {
@@ -31,6 +31,7 @@
                 body: e.files[0]
             })
 
+            console.log(final_result)
             if (final_result.ok) {
                 document.querySelector('input[name="image"]').value = final_result.url.split("?")[0]
             }
