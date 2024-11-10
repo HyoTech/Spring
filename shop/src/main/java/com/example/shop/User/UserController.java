@@ -3,14 +3,12 @@ package com.example.shop.User;
 import java.util.Optional;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.shop.Sales.OrdersService;
 import com.example.shop.User.MyUserDetailsService.CustomUser;
@@ -38,8 +36,9 @@ public class UserController {
     public String CreateUser(@RequestParam("userName") String userName,
             @RequestParam("password") String password,
             @RequestParam("displayName") String displayName,
+            @RequestParam("email") String email,
             @RequestParam("authLevel") Integer authLevel) throws Exception {
-        userService.CrtUser(userName, password, displayName, authLevel);
+        userService.CrtUser(userName, password, displayName, email, authLevel);
         return "redirect:/list/page/1";
     }
 

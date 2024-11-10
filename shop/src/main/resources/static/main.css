@@ -899,3 +899,22 @@ th {
 .google-login-btn:hover {
     background-color: #c33e2d;
 }
+
+.approve-btn, .reject-btn {
+    padding: 10px 20px;
+    margin-left: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.approve-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+}
+
+.reject-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+}

@@ -8,6 +8,10 @@
         <a href="/write">상품 등록</a>
     </div>
 
+    <div th:if="${userLevel == 1}">
+        <a href="/authsimsa">회원 심사</a>
+    </div>
+
     <div class="right">
         <div th:if="${userLevel == null and ROLE == null}">
             <a href="/login"><img src="/images/login-icon.png" alt="Login Icon" width="50" height="50"></a>

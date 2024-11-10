@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h4>회원 권한 심사페이지</h4>
+        <div class="post-list">
+            <div class="post" th:each="u : ${usAuthSimsa}">
+                <p class="id" th:text="${u.id}" style="display: none;">고유번호</p>
+                <h2 class="username" th:text="'아이디: ' + ${u.userName}">아이디</h2>
+                <p class="displayname" th:text="'이름: ' + ${u.displayName}">이름</p>
+                <p class="email" th:text="'이메일: ' + ${u.email}">이메일</p>
+                <p class="authlevel" th:text="'권한레벨: ' + ${u.authLevel}">권한레벨</p>
+                <button class="approve-btn" onclick="approve()">허가</button>
+                <button class="reject-btn" onclick="reject()">반려</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    var posts = document.querySelectorAll('.post');
+
+    posts.forEach((post, index) => {
+    var id = post.querySelector('.id').textContent;
+    var rejectbtn = post.querySelector('.reject-btn');
+    var approvebtn = post.querySelector('.approve-btn');
+
+    // 반려 버튼 클릭 이벤트 리스너
+    rejectbtn.addEventListener('click', function(e) {
+        e.preventDefault(); 
+        fetch(`/reject/${id}`, {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => response.text())
+        .then(result => {
+            window.location.reload();
+        })
+        .catch(error => console.error("Error:", error));
+    });
+
+    // 허가 버튼 클릭 이벤트 리스너
+    approvebtn.addEventListener('click', function(e) {
+        e.preventDefault(); 
+        fetch(`/approve/${id}`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => response.text())
+        .then(result => {
+            window.location.reload();
+        })
+        .catch(error => console.error("Error:", error));
+        });
+    });
+    </script>
+</body>
+</html>
