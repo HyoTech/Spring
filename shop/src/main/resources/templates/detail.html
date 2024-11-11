@@ -37,7 +37,7 @@
             <div th:if="${comment.getUsername != null and comment.getUsername == #authentication.name}">
                 <button class="DelCommentButton">삭제</button>        
             </div>
-            <p class="CID" th:text="${comment.getId}" style="display: none;">아이디</p>
+            <p class="cid" th:text="${comment.getId}" style="display: none;">아이디</p>
         </div>
     </div>
 
@@ -64,22 +64,28 @@
 </div>
 
   <script>
-    var delButton = document.querySelector('.DelCommentButton');
-    var id = document.querySelector('.CID').textContent;
+    var delButtons = document.querySelectorAll('.DelCommentButton');
+    
+    delButtons.forEach(function(delButton) {
+        var id = delButton.closest('.comment-item').querySelector('.cid').textContent;
 
-    delButton.addEventListener('click', function(e){
-        e.preventDefault();
-        fetch(`/delComm/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type' : 'application/json',
-            }
-        })
-        .then(response => response.text())
-        .then(result => {
-             window.location.href = '/list';
+        console.log(id);
+
+        delButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            fetch(`/delComm/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.text())
+            .then(result => {
+                window.location.href = '/list/page/1';
+            });
         });
-    })
+    });
   </script>
 </body>
 </html>

@@ -1,10 +1,16 @@
 package com.example.shop.User;
 
+import java.util.Optional;
+
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.shop.User.MyUserDetailsService.CustomUser;
 import com.example.shop.UserAuthSimsa.UserAuthSimsa;
 import com.example.shop.UserAuthSimsa.UserAuthSimsaRepository;
 
@@ -53,6 +59,26 @@ public class UserService {
             userAuthSimsa.setEmail(email);
             userAuthSimsa.setAuthLevel(authLevel);
             userAuthSimsaRepository.save(userAuthSimsa);
+        }
+    }
+
+    public void mypages(Authentication auth, Model model) {
+        if (auth != null) {
+            Object principal = auth.getPrincipal();
+
+            if (principal instanceof CustomUser) {
+                // 일반 로그인 사용자
+                CustomUser user = (CustomUser) principal;
+                Optional<UserInfo> userInfo = userRepository.findByUserName(user.getUsername());
+                userInfo.ifPresent(info -> model.addAttribute("userinfo", info));
+
+            } else if (principal instanceof OAuth2User) {
+                // OAuth2 사용자
+                OAuth2User oAuth2User = (OAuth2User) principal;
+                String email = oAuth2User.getAttribute("email"); // Google의 경우 이메일을 사용
+                Optional<UserInfo> userInfo = userRepository.findByEmail(email);
+                userInfo.ifPresent(info -> model.addAttribute("userinfo", info));
+            }
         }
     }
 }

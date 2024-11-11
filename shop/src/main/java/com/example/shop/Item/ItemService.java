@@ -2,7 +2,11 @@ package com.example.shop.Item;
 
 import java.util.*;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -99,11 +103,27 @@ public class ItemService {
     }
 
     // 상품삭제기능 ID를 통해 행삭제
-    public void DeItem(@PathVariable("id") Long id) {
+    public boolean DeItem(@PathVariable("id") Long id, Authentication auth) {
         Optional<Item> item = itemRepository.findById(id);
-        if (item.isPresent()) {
+        if (item.isPresent() && item.get().getWriter().equals(auth.getName())) {
             itemRepository.deleteById(id);
+            return true;
         }
+        return false;
     }
 
+    public void paging(Model model, @PathVariable("id") Integer id) {
+        Page<Item> result = itemRepository.findPageBy(PageRequest.of(id - 1, 5));
+        model.addAttribute("items", result);
+        model.addAttribute("currentPage", id);
+    }
+
+    public void searchItem(Model model, String searchText, int page) {
+        Pageable pageable = PageRequest.of(page, 5);
+        Page<Item> result = itemRepository.fullTextSearch(searchText, pageable);
+
+        model.addAttribute("searchText", searchText);
+        model.addAttribute("searchItem", result);
+        model.addAttribute("currentPage", page);
+    }
 }

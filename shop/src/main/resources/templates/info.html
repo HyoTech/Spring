@@ -45,6 +45,21 @@
         </div>
     </div>
 
+    <ul class="pagination">
+        <li th:if="${infos.hasPrevious()}">
+            <a th:href="@{|/list/infopage/${currentPage - 1}|}">Previous</a>
+        </li>
+        
+        <li th:each="j : ${#numbers.sequence(1, infos.totalPages)}"
+            th:classappend="${j == currentPage} ? 'active'">
+            <a th:href="@{|/list/infopage/${j}|}" th:text="${j}">1</a>
+        </li>
+    
+        <li th:if="${infos.hasNext()}">
+            <a th:href="@{|/list/infopage/${currentPage + 1}|}">Next</a>
+        </li>
+    </ul>
+
     <script>
     var info = document.querySelectorAll('.Info');
 

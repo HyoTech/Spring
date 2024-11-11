@@ -1,7 +1,6 @@
 package com.example.shop.Infomation;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,15 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.shop.Comment.Comment;
-import com.example.shop.Comment.CommentRepository;
-import com.example.shop.User.MyUserDetailsService.CustomUser;
+import com.example.shop.Comment.CommentService;
 
 @Controller
 @RequiredArgsConstructor
 public class InfoController {
-    private final InfoRepository infoRepository;
-    private final CommentRepository commentRepository;
+    private final InfoService infoService;
+    private final CommentService commentService;
 
     @GetMapping("/InfoWrite")
     public String InfoWrite() {
@@ -35,55 +32,21 @@ public class InfoController {
     @PostMapping("/SubmitInfo")
     public String savedInfo(@RequestParam("InfoTitle") String InfoTilte, @RequestParam("Writer") String Writer,
             @RequestParam("InfoValue") String InfoValue, @RequestParam("InfoDate") String InfoDate) {
-        Information info = new Information();
-
-        info.setInfo_Date(InfoDate);
-        info.setInfo_Title(InfoTilte);
-        info.setInfo_Value(InfoValue);
-        info.setWriter(Writer);
-        info.setView(0);
-        infoRepository.save(info);
-        return "redirect:/info";
+        infoService.infoSaved(InfoTilte, Writer, InfoValue, InfoDate);
+        return "redirect:/list/infopage/1";
     }
 
     @GetMapping("/detailInfo/{id}")
     public String detailInfo(@PathVariable("id") long id, Model model) {
-        Optional<Information> Result = infoRepository.findById(id);
-        List<Comment> commentResult = commentRepository.findByParentId(id);
-
-        if (Result.isPresent()) {
-            model.addAttribute("dInfo", Result.get());
-        }
-
-        // 공지사항의 경우 카테고리로 공지사항인지 아닌지 판단 후 공지사항인 경우에만 R기능 수행
-        // 상품의 경우도 마찬가지 category만 바꿔주면 됨(동일 테이블 사용)
-        if (!commentResult.isEmpty()) {
-            List<Comment> filteredComments = commentResult.stream()
-                    .filter(comment -> comment.getParentCategory() == 2)
-                    .collect(Collectors.toList());
-
-            if (!filteredComments.isEmpty()) {
-                model.addAttribute("comment", filteredComments);
-            }
-        } else {
-            model.addAttribute("comment", null);
-        }
-
+        infoService.infoDetailed(id, model);
+        commentService.infoCommentShow(id, model);
         return "detailInfo.html";
     }
 
     // 조회수 관련 API
     @PostMapping("/countClick/{id}")
     ResponseEntity<String> plusViewCount(@PathVariable("id") long id, @RequestBody Map<String, Integer> body) {
-        Optional<Information> result = infoRepository.findById(id);
-
-        if (result.isPresent()) {
-            Information info = result.get();
-            Integer view = body.get("View");
-            info.setView(view);
-            infoRepository.save(info);
-        }
-
+        infoService.pushView(id, body);
         return ResponseEntity.status(200).body("Count");
     }
 
@@ -93,21 +56,19 @@ public class InfoController {
     @DeleteMapping("/deleteInfo/{id}")
     ResponseEntity<String> delInfo(@PathVariable("id") long id,
             Authentication auth) {
-        Optional<Information> result = infoRepository.findById(id);
+        boolean deleteSuccess = infoService.infoDeleted(id, auth);
 
-        if (!result.isPresent()) {
-            return ResponseEntity.status(404).body("Information not found");
+        if (deleteSuccess) {
+            return ResponseEntity.status(200).body("삭제 성공");
+        } else {
+            return ResponseEntity.status(403).body("삭제 실패: 권한이 없거나 글이 존재하지 않습니다.");
         }
+    }
 
-        Information info = result.get();
-        CustomUser user = (CustomUser) auth.getPrincipal();
-
-        if (info.getWriter().equals(user.getUsername())) {
-            infoRepository.deleteById(id);
-            return ResponseEntity.status(200).body("delete success");
-        }
-
-        return ResponseEntity.status(403).body("delete fail");
+    @GetMapping("/list/infopage/{id}")
+    public String pageinfolist(Model model, @PathVariable("id") Integer id) {
+        infoService.pageinginfo(model, id);
+        return "info.html";
     }
 
 }

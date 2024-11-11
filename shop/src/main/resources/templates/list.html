@@ -22,7 +22,7 @@
           </h4>
           <p class="ID" th:text="${i.id}" style="display: none;">아이디</p>
           <p class="Price" th:text="${i.price + '원'}">가격</p>
-          <p class="Writer" th:text="'작성자 : ' + ${i.writer}">작성자</p>
+          <p class="Writer" th:text="'판매자 : ' + ${i.writer}">작성자</p>
           <div th:if="${userLevel != null and 2 >= userLevel}">
             <a th:href="@{'modify/' + ${i.id}}">✏️</a>
             <button class="btn">🗑️</button>

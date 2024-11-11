@@ -16,7 +16,7 @@
         <table class="notice-info-table">
             <tr>
                 <td>
-                    <strong>글번호:</strong> <span th:text="${dInfo.id}">글 번호</span>
+                    <strong>글번호:</strong> <span class="iid" th:text="${dInfo.id}">글 번호</span>
                 </td>
                 <td>
                     <strong>작성자:</strong> <span th:text="${dInfo.Writer}">작성자 이름</span>
@@ -48,7 +48,7 @@
             <div th:if="${comment.getUsername != null and comment.getUsername == #authentication.name}">
                 <button class="DelCommentButton">삭제</button>        
             </div>
-            <p class="CID" th:text="${comment.getId}" style="display: none;">아이디</p>
+            <p class="cid" th:text="${comment.getId}" style="display: none;">아이디</p>
         </div>
     </div>
 
@@ -74,22 +74,50 @@
     </div>
 
     <script>
-        var deleteBtn = document.querySelector('.deleteButton');
-        var id = document.querySelector('.notice-info span').textContent.trim(); // 글번호 가져오기
+    var deleteBtn = document.querySelector('.deleteButton');
 
-        deleteBtn.addEventListener('click', function(e){
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        var infoId = document.querySelector('.iid').textContent;
+
+        fetch(`/deleteInfo/${infoId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.text())
+        .then(result => {
+            window.location.href = '/info';
+            });
+        });
+    }
+
+    var delCommentButtons = document.querySelectorAll('.DelCommentButton');
+    delCommentButtons.forEach(function(delButton) {
+    var cidElement = delButton.closest('.comment-item').querySelector('.cid');
+    
+    if (cidElement) {
+        var commentId = cidElement.textContent;
+
+        delButton.addEventListener('click', function(e) {
             e.preventDefault();
-            fetch(`/deleteInfo/${id}`, {
+            
+            fetch(`/delComm/${commentId}`, {
                 method: 'DELETE',
                 headers: {
-                    'Content-Type' : 'application/json',
+                    'Content-Type': 'application/json',
                 }
             })
             .then(response => response.text())
             .then(result => {
                 window.location.href = '/info';
+                });
             });
-        });
+        }
+    });
     </script>
 </body>
 </html>

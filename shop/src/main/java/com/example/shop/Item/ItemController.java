@@ -1,16 +1,10 @@
 package com.example.shop.Item;
 
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,17 +17,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.shop.Comment.Comment;
-import com.example.shop.Comment.CommentRepository;
+import com.example.shop.Comment.CommentService;
 
 @Service
 @Controller
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemService itemService;
-    private final ItemRepository itemRepository;
     private final S3Service s3Service;
-    private final CommentRepository commentRepository;
+    private final CommentService commentService;
 
     // 공지사항 API
     @GetMapping("/info")
@@ -65,20 +57,7 @@ public class ItemController {
     // 코멘트 테이블을 공지사항, 물품리스트 두 테이블이 같이 사용하고 있기때문에 구분 코드 추가(ParentID 겹칠것을 우려)
     @GetMapping("/list/page/detail/{id}")
     String detail(@PathVariable("id") long id, Model model) {
-        List<Comment> commentResult = commentRepository.findByParentId(id);
-
-        if (!commentResult.isEmpty()) {
-            List<Comment> filteredComments = commentResult.stream()
-                    .filter(comment -> comment.getParentCategory() == 1)
-                    .collect(Collectors.toList());
-
-            if (!filteredComments.isEmpty()) {
-                model.addAttribute("comment", filteredComments);
-            }
-        } else {
-            model.addAttribute("comment", null);
-        }
-
+        commentService.itemCommentShow(id, model);
         itemService.showDetail(id, model);
         return "detail.html";
     }
@@ -101,28 +80,33 @@ public class ItemController {
 
     // 상품 삭제 API
     @DeleteMapping("/del/{id}")
-    ResponseEntity<String> deleItem(@PathVariable("id") Long id, @RequestBody Map<String, String> body) {
+    ResponseEntity<String> deleItem(@PathVariable("id") Long id, @RequestBody Map<String, String> body,
+            Authentication auth) {
         String objectKey = body.get("ObjectKey");
 
+        System.out.println(objectKey);
         if (objectKey == null) {
             return ResponseEntity.status(400).body("ObjectKey가 없습니다.");
         }
 
+        boolean deleteSuccess = itemService.DeItem(id, auth);
+
+        if (!deleteSuccess) {
+            return ResponseEntity.status(403).body("삭제 실패: 권한이 없거나 아이템이 존재하지 않습니다.");
+        }
+
         try {
-            itemService.DeItem(id);
             s3Service.deleteFileFromS3(objectKey);
             return ResponseEntity.status(200).body("삭제 완료");
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("삭제 중 오류 발생: " + e.getMessage());
+            return ResponseEntity.status(500).body("S3 삭제 중 오류 발생: " + e.getMessage());
         }
     }
 
     // DB에 있는 상품명과 가격을 카드형태로 보여줌, 페이징 기능
     @GetMapping("/list/page/{id}")
     String pagelist(Model model, @PathVariable("id") Integer id) {
-        Page<Item> result = itemRepository.findPageBy(PageRequest.of(id - 1, 5));
-        model.addAttribute("items", result);
-        model.addAttribute("currentPage", id);
+        itemService.paging(model, id);
         return "list.html";
     }
 
@@ -136,13 +120,8 @@ public class ItemController {
 
     @GetMapping("/search")
     String getSearch(Model model, @RequestParam("searchText") String searchText,
-            @RequestParam(defaultValue = "0") int page) {
-        Pageable Pageable = PageRequest.of(page, 5);
-        Page<Item> result = itemRepository.fullTextSearch(searchText, Pageable);
-        model.addAttribute("searchText", searchText);
-        model.addAttribute("searchItem", result);
-        model.addAttribute("currentPage", page);
+            @RequestParam(name = "page", defaultValue = "0") int page) {
+        itemService.searchItem(model, searchText, page);
         return "search.html";
     }
-
 }

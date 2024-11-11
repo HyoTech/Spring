@@ -1,7 +1,5 @@
 package com.example.shop.Comment;
 
-import java.util.Optional;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -14,26 +12,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.shop.User.MyUserDetailsService.CustomUser;
-
 @Service
 @Controller
 @RequiredArgsConstructor
 public class CommentController {
-    private final CommentRepository commentRepository;
+    private final CommentService commentService;
 
     @PostMapping("/detail/comment")
     public String postItemComment(@RequestParam("username") String username, @RequestParam("comment") String comment,
             @RequestParam("parentid") long parentid,
             @RequestParam("parentcategory") long parentcategory) {
-        if (comment != null) {
-            Comment newComment = new Comment();
-            newComment.setUsername(username);
-            newComment.setContent(comment);
-            newComment.setParentId(parentid);
-            newComment.setParentCategory(parentcategory);
-            commentRepository.save(newComment);
-        }
+        commentService.itemCommentSaved(username, comment, parentid, parentcategory);
         return "redirect:/list/page/1";
     }
 
@@ -44,15 +33,8 @@ public class CommentController {
     public String postInfoComment(@RequestParam("username") String username, @RequestParam("comment") String comment,
             @RequestParam("parentid") long parentid,
             @RequestParam("parentcategory") long parentcategory) {
-        if (comment != null) {
-            Comment newComment = new Comment();
-            newComment.setUsername(username);
-            newComment.setContent(comment);
-            newComment.setParentId(parentid);
-            newComment.setParentCategory(parentcategory);
-            commentRepository.save(newComment);
-        }
-        return "redirect:/list/page/1";
+        commentService.infoCommentSaved(username, comment, parentid, parentcategory);
+        return "redirect:/info";
     }
 
     // 댓글 삭제기능
@@ -60,20 +42,12 @@ public class CommentController {
     // 자신이 작성한 댓글이 아니면 삭제버튼이 안보이게 하는것도 하나의 방법
     @DeleteMapping("/delComm/{id}")
     ResponseEntity<String> delComm(@PathVariable("id") Long id, Authentication auth) {
-        Optional<Comment> result = commentRepository.findById(id);
+        boolean deleteSuccess = commentService.commentDeleted(id, auth);
 
-        if (!result.isPresent()) {
-            return ResponseEntity.status(400).body("Comment not found");
+        if (deleteSuccess) {
+            return ResponseEntity.status(200).body("삭제 성공");
+        } else {
+            return ResponseEntity.status(403).body("삭제 실패: 권한이 없거나 댓글이 존재하지 않습니다.");
         }
-
-        Comment comment = result.get();
-        CustomUser customUser = (CustomUser) auth.getPrincipal();
-
-        if (comment.getUsername().equals(customUser.getUsername())) {
-            commentRepository.deleteById(id);
-            return ResponseEntity.status(200).body("delete success");
-        }
-
-        return ResponseEntity.status(200).body("del success");
     }
 }
