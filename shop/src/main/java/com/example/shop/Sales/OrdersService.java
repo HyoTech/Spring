@@ -65,7 +65,7 @@ public class OrdersService {
             orderDto.price = order.getPrice();
             orderDto.username = order.getMember().getUserName();
             orderDto.count = order.getCount();
-            orderDto.createTime = order.getTime();
+            orderDto.createTime = order.getCreatedTime();
             orderDtoList.add(orderDto);
         }
         model.addAttribute("orders", orderDtoList);
@@ -95,6 +95,32 @@ public class OrdersService {
             if (userInfoOptional.isPresent()) {
                 UserInfo userInfo = userInfoOptional.get();
                 List<Orders> orders = ordersRepository.findByMember(userInfo);
+
+                model.addAttribute("orders", orders);
+            }
+        }
+    }
+
+    public void recentlyOrder(Model model, Authentication auth) {
+        if (auth != null && auth.isAuthenticated()) {
+            Object principal = auth.getPrincipal();
+            Optional<UserInfo> userInfoOptional = Optional.empty();
+
+            if (principal instanceof CustomUser) {
+                // 커스텀 유저 로그인 사용자
+                CustomUser user = (CustomUser) principal;
+                userInfoOptional = userRepository.findByUserName(user.getUsername());
+
+            } else if (principal instanceof OAuth2User) {
+                // OAuth2 로그인 사용자
+                OAuth2User oAuth2User = (OAuth2User) principal;
+                String email = oAuth2User.getAttribute("email"); // OAuth2 사용자의 이메일
+                userInfoOptional = userRepository.findByEmail(email);
+            }
+
+            if (userInfoOptional.isPresent()) {
+                UserInfo userInfo = userInfoOptional.get();
+                Orders orders = ordersRepository.findTop1ByMemberOrderByCreatedTimeDesc(userInfo);
 
                 model.addAttribute("orders", orders);
             }

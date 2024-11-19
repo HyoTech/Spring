@@ -14,11 +14,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import jakarta.persistence.ForeignKey;
 
 @Entity
 @ToString
+@Getter
+@Setter
 public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,48 +37,4 @@ public class Orders {
 
     @CreationTimestamp
     private LocalDateTime createdTime;
-
-    public long getID() {
-        return id;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public Integer getCount() {
-        return count;
-    }
-
-    public UserInfo getMember() {
-        return member;
-    }
-
-    public LocalDateTime getTime() {
-        return createdTime;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
-    }
-
-    public void setMember(UserInfo member) {
-        this.member = member;
-    }
-
-    public void setTime(LocalDateTime createdTime) {
-        this.createdTime = createdTime;
-    }
 }

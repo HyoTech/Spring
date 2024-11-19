@@ -22,9 +22,11 @@ public class OrdersController {
     public String postOrder(@RequestParam("Count") Integer Count,
             @RequestParam("productName") String productName,
             @RequestParam("Price") Integer Price,
-            Authentication auth) {
+            Authentication auth,
+            Model model) {
         ordersService.beOrder(Count, productName, Price, auth);
-        return "redirect:/list/page/1";
+        ordersService.recentlyOrder(model, auth);
+        return "OrderComplete.html";
     }
 
     @GetMapping("/order/all")
@@ -32,4 +34,5 @@ public class OrdersController {
         ordersService.showOrders(model);
         return "OrderPage.html";
     }
+
 }

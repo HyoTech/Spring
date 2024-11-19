@@ -17,6 +17,15 @@
         <div class="user-info" th:each="u : ${userinfo}">
             <h2>Welcome, <span th:text="${username}">User</span>!</h2>
             <p>이름: <span th:text="${u.displayName}">name</span></p>
+            <div th:if="${u.authLevel == 1}">
+                <p>권한: 관리자</p>
+            </div>
+            <div th:if="${u.authLevel == 2}">
+                <p>권한: 판매자</p>
+            </div>
+            <div th:if="${u.authLevel == 3 or u.authLevel == null}">
+                <p>권한: 일반 이용자</p>
+            </div>
         </div>
     </section>
 

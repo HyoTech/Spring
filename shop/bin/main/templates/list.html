@@ -23,9 +23,9 @@
           <p class="ID" th:text="${i.id}" style="display: none;">아이디</p>
           <p class="Price" th:text="${i.price + '원'}">가격</p>
           <p class="Writer" th:text="'판매자 : ' + ${i.writer}">작성자</p>
-          <div th:if="${userLevel != null and 2 >= userLevel}">
-            <a th:href="@{'modify/' + ${i.id}}">✏️</a>
-            <button class="btn">🗑️</button>
+          <div class="button-container" th:if="${1 == userLevel or username == i.writer}">
+            <a th:href="@{'modify/' + ${i.id}}" class="button-link button-common">수정</a>
+            <button class="deleteButton button-common">삭제</button>
           </div>  
       </div>
     </div>
@@ -53,31 +53,43 @@
     // 카드 요소를 모두 선택
     var cards = document.querySelectorAll('.card');
 
-    cards.forEach((card, index) => {
+    cards.forEach((card) => {
       var imgurl = card.querySelector('.imgurl').getAttribute('src');
-      var deleteBtn = card.querySelector('.btn');
+      var deleteBtn = card.querySelector('.deleteButton');
       var id = card.querySelector('.ID').textContent;
-
       var objectKey = imgurl.split(".com/")[1]; 
 
-      // 삭제 버튼 클릭 이벤트 리스너
+      if(deleteBtn){
       deleteBtn.addEventListener('click', function(e) {
-        e.preventDefault(); 
-        fetch(`/del/${id}`, {
-          method: 'DELETE',
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body : JSON.stringify({
-            ObjectKey: objectKey
-          }),
-        })
-        .then(response => response.text())
-        .then(result => {
-          window.location.reload();
-        });
+        e.preventDefault();
+
+        // 확인 메시지 표시
+        var confirmDelete = confirm("정말로 삭제하시겠습니까?");
+        if (confirmDelete) {
+          // 사용자가 확인을 누르면 삭제 요청을 전송
+          fetch(`/del/${id}`, {
+            method: 'DELETE',
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              ObjectKey: objectKey
+            }),
+          })
+          .then(response => response.text())
+          .then(result => {
+            alert(result); // 서버 응답 메시지 출력
+            window.location.reload();
+          })
+          .catch(error => {
+            alert("삭제 요청 중 오류가 발생했습니다.");
+            console.error("Error:", error);
+          });
+        }
       });
+    }
     });
+    
   </script>
 </body>
 </html>

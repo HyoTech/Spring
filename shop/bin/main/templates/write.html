@@ -9,14 +9,19 @@
 <body>
     <div th:replace="~{nav.html :: navbar}"></div> 
 
-    <form action="/add", method="POST">
-        <input name="writer" th:value="${#authentication.name}" readonly>
-        <input name="title">
-        <input name="price">
-        <input type="file" name="imagefile" onchange="getURL(this)">
-        <input type="hidden" name="image">
-        <button type="submit">전송</button>
-    </form>
+    <div class="form-wrapper">
+        <div class="form-container">
+            <h2>상품 등록</h2>
+            <form action="/add" method="POST">
+                <input name="writer" th:value="${#authentication.name}" readonly placeholder="작성자">
+                <input name="title" type="text" placeholder="상품명">
+                <input name="price" type="number" placeholder="가격">
+                <input type="file" name="imagefile" onchange="getURL(this)">
+                <input type="hidden" name="image">
+                <button type="submit">전송</button>
+            </form>
+        </div>
+    </div>
 
     <script>
         async function getURL(e){

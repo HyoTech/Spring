@@ -21,7 +21,7 @@
                 <input type="password" id="password" name="password" required>
             </div>
             <div th:if="${session.errorMessage}" class="error-message">
-                <p th:text="${session.errorMessage}"></p> <!-- 에러 메시지 출력 -->
+                <p th:text="${session.errorMessage}"></p>
             </div>
             <div class="form-actions">
                 <a href="/UserInput" class="signup-link">회원가입</a>

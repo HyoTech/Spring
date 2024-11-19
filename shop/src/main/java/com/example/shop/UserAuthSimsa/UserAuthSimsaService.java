@@ -56,7 +56,7 @@ public class UserAuthSimsaService {
             UserInfo userInfo = new UserInfo();
             userInfo.setId(authData.getId());
             userInfo.setUserName(authData.getUserName());
-            userInfo.setPassWord(authData.getPassWord());
+            userInfo.setPassword(authData.getPassword());
             userInfo.setDisplayName(authData.getDisplayName());
             userInfo.setEmail(authData.getEmail());
             userInfo.setAuthLevel(authData.getAuthLevel());

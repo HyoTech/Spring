@@ -47,7 +47,7 @@ public class ItemController {
             @RequestParam("image") String image,
             Authentication auth) {
         if (auth.isAuthenticated()) {
-            itemService.addItem(title, price, writer, image);
+            itemService.addItem(title, price, writer, image, auth);
         }
         return "redirect:/list/page/1";
     }
@@ -84,12 +84,11 @@ public class ItemController {
             Authentication auth) {
         String objectKey = body.get("ObjectKey");
 
-        System.out.println(objectKey);
-        if (objectKey == null) {
-            return ResponseEntity.status(400).body("ObjectKey가 없습니다.");
-        }
-
         boolean deleteSuccess = itemService.DeItem(id, auth);
+
+        if (objectKey.isEmpty()) {
+            objectKey = "";
+        }
 
         if (!deleteSuccess) {
             return ResponseEntity.status(403).body("삭제 실패: 권한이 없거나 아이템이 존재하지 않습니다.");

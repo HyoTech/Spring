@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문 상세 정보</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <div class="order-details-container">
+        <h1>주문이 완료되었습니다!</h1>
+        <div class="order-summary">
+            <h2>주문 상세 정보</h2>
+            <p><strong>주문번호:</strong> <p class="title" th:text="${orders.id}">제목</p></p>
+            <p><strong>상품명:</strong> <p class="title" th:text="${orders.productName}">제목</p></p>
+            <p><strong>가격:</strong> <p class="price" th:text="${orders.price}">가격</p></p>
+            <p><strong>수량:</strong> <p class="count" th:text="${orders.count}">수량</p></p>
+            <p><strong>주문자:</strong> <p class="writer" th:text="${orders.member.userName}">주문자</p></p>
+            <p><strong>주문날짜:</strong> <p class="date" th:text="${orders.createdTime}">날짜</p></p>
+        </div>
+        <div class="button-container">
+            <a href="/list/page/1" class="button shop-button">쇼핑하기</a>
+            <a href="/my-page" class="button order-history-button">나의 주문내역</a>
+        </div>
+    </div>
+</body>
+</html>

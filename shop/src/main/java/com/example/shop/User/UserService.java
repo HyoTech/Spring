@@ -24,40 +24,36 @@ public class UserService {
     private final UserAuthSimsaRepository userAuthSimsaRepository;
 
     // 회원가입기능, 폼에 입력된 데이터를 DB에 저장, 패스워드는 암호화
-    public void CrtUser(@RequestParam("userName") String userName,
-            @RequestParam("password") String password,
-            @RequestParam("displayName") String displayName,
-            @RequestParam("email") String email,
-            @RequestParam("authLevel") Integer authLevel) throws Exception {
-        UserInfo userInfo = new UserInfo();
-        UserAuthSimsa userAuthSimsa = new UserAuthSimsa();
+    public void CrtUser(UserInfo userInfo) throws Exception {
         var encoder = new BCryptPasswordEncoder();
-        var result = userRepository.findByUserName(userName);
 
-        if (userName.length() < 5 || password.length() < 5) {
-            throw new Exception("너무 짧은 아이디 혹은 패스워드 입니다.");
-        }
+        /*
+         * if (!userInfo.getPassword()
+         * .matches(
+         * "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,16}$"))
+         * {
+         * throw new Exception("비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.");
+         * }
+         */
 
-        if (result.isPresent()) {
-            throw new Exception("중복된 아이디입니다.");
-        }
+        userInfo.setPassword(encoder.encode(userInfo.getPassword()));
 
-        if (displayName == null) {
-            throw new Exception("이름을 입력해주세요.");
-        }
-        if (authLevel == 3) {
-            userInfo.setUserName(userName);
-            userInfo.setPassWord(encoder.encode(password));
-            userInfo.setDisplayName(displayName);
-            userInfo.setEmail(email);
-            userInfo.setAuthLevel(authLevel);
+        if (userInfo.getAuthLevel() == 3) {
+            userInfo.setUserName(userInfo.getUserName());
+            userInfo.setPassword(userInfo.getPassword());
+            userInfo.setDisplayName(userInfo.getDisplayName());
+            userInfo.setEmail(userInfo.getEmail());
+            userInfo.setAuthLevel(userInfo.getAuthLevel());
+            System.out.println("userInfo=" + userInfo);
             userRepository.save(userInfo);
-        } else if (authLevel == 1 || authLevel == 2) {
-            userAuthSimsa.setUserName(userName);
-            userAuthSimsa.setPassWord(encoder.encode(password));
-            userAuthSimsa.setDisplayName(displayName);
-            userAuthSimsa.setEmail(email);
-            userAuthSimsa.setAuthLevel(authLevel);
+        } else if (userInfo.getAuthLevel() == 1 || userInfo.getAuthLevel() == 2) {
+            UserAuthSimsa userAuthSimsa = new UserAuthSimsa();
+            userAuthSimsa.setUserName(userInfo.getUserName());
+            userAuthSimsa.setPassword(userInfo.getPassword());
+            userAuthSimsa.setDisplayName(userInfo.getDisplayName());
+            userAuthSimsa.setEmail(userInfo.getEmail());
+            userAuthSimsa.setAuthLevel(userInfo.getAuthLevel());
+            System.out.println("userAuthSimsa=" + userAuthSimsa);
             userAuthSimsaRepository.save(userAuthSimsa);
         }
     }
@@ -81,4 +77,5 @@ public class UserService {
             }
         }
     }
+
 }

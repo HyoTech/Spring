@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,19 +35,29 @@ public class CommentService {
 
     public boolean commentDeleted(Long id, Authentication auth) {
         Optional<Comment> result = commentRepository.findById(id);
+        Comment comment = result.get();
 
         if (result.isEmpty()) {
             return false; // 댓글이 존재하지 않으면 false 반환
         }
 
-        Comment comment = result.get();
-        CustomUser customUser = (CustomUser) auth.getPrincipal();
-
-        System.out.println("comment = " + comment.getUsername());
         // 댓글 작성자와 로그인한 사용자가 일치하는지 확인
-        if (comment.getUsername().equals(customUser.getUsername())) {
-            commentRepository.deleteById(id); // 댓글 삭제
-            return true; // 삭제 성공
+        if (auth != null && auth.isAuthenticated()) {
+            Object principal = auth.getPrincipal();
+
+            if (principal instanceof CustomUser) {
+                CustomUser customUser = (CustomUser) principal;
+                if (comment.getUsername().equals(customUser.getUsername())) {
+                    commentRepository.deleteById(id); // 댓글 삭제
+                    return true; // 삭제 성공
+                }
+            } else if (principal instanceof OAuth2User) {
+                OAuth2User oAuth2User = (OAuth2User) principal;
+                if (comment.getUsername().equals(oAuth2User.getAttribute("name"))) {
+                    commentRepository.deleteById(id); // 댓글 삭제
+                    return true; // 삭제 성공
+                }
+            }
         }
 
         return false; // 권한이 없거나 조건을 만족하지 않으면 false 반환

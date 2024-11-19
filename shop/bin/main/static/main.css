@@ -509,45 +509,77 @@ input[type="password"] {
 
 /* 공지사항 섹션 스타일 */
 .notice-section {
-    background-color: #fff;
-    padding: 20px;
-    margin-bottom: 20px;
+    width: 150%; 
+    max-width: 1510px; 
+    margin: 2rem auto;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
 }
 
 .notice-section h1 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+    text-align: left; 
+    padding-left: 0.5rem;
 }
 
 .notice-list {
-    list-style-type: none;
+    list-style: none;
     padding: 0;
 }
 
 .notice-list li {
-    margin-bottom: 15px;
-    padding-bottom: 10px;
+    display: flex; 
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background-color: #fff;
     border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s ease;
 }
 
-/* 상품 목록 섹션 스타일 */
+.notice-list li:hover {
+    background-color: #f0f0f0;
+}
+
+.notice-list a {
+    font-size: 1.3rem;
+    color: #007bff;
+    text-decoration: none;
+    flex: 1; /* 제목이 넓은 영역을 차지 */
+}
+
+.notice-list a:hover {
+    text-decoration: underline;
+}
+
+.notice-list p {
+    font-size: 1rem;
+    color: #666;
+    padding-left: 1rem;
+    text-align: right;
+    min-width: 120px;
+    flex-shrink: 0;
+}
 
 /* 섹션 스타일 */
 .product-section {
-    background-color: #ffffff; /* 흰색 배경 */
+    background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 100%;
-    text-align: left;
+    max-width: 80%;
+    text-align: center; /* 전체 섹션을 중앙으로 정렬 */
+    margin: 0 auto; /* 화면 중앙에 배치 */
 }
 
 /* 섹션 헤더 스타일 */
 .section-header {
     display: flex;
-    justify-content: space-between; /* 제목과 "상품 더보기" 버튼을 양 끝으로 배치 */
+    justify-content: center; /* 섹션 헤더를 중앙 정렬 */
     align-items: center;
     margin-bottom: 20px;
 }
@@ -556,6 +588,8 @@ input[type="password"] {
 .product-section h1 {
     font-size: 1.5rem;
     color: #333;
+    text-align: center; /* 제목을 중앙 정렬 */
+    margin: 0 auto;
 }
 
 /* 상품 더보기 버튼 */
@@ -566,6 +600,8 @@ input[type="password"] {
     padding: 10px 20px;
     border-radius: 5px;
     font-size: 0.9rem;
+    display: inline-block;
+    margin-top: 20px;
 }
 
 .view-all:hover {
@@ -874,10 +910,7 @@ th {
 .deleteButton {
     background-color: #ff4d4d;
     color: white;
-    padding: 10px 20px;
     border: none;
-    border-radius: 5px;
-    cursor: pointer;
 }
 
 .deleteButton:hover {
@@ -917,4 +950,201 @@ th {
     background-color: #f44336;
     color: white;
     border: none;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="file"],
+input[readonly] {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+input[readonly] {
+    background-color: #e9e9e9;
+}
+
+/* 이미지 미리보기 스타일 */
+form input[type="file"] {
+    padding: 0.4rem;
+}
+
+/* 숨김 클래스 */
+.hidden {
+    display: none;
+}
+
+.form-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* 작성 폼 스타일 */
+.form-container {
+    background-color: #ffffff;
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 각 필드 스타일 */
+.form-container input[type="text"],
+.form-container input[type="number"],
+.form-container input[type="file"],
+.form-container button {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+/* 읽기 전용 필드 스타일 */
+.form-container input[readonly] {
+    background-color: #e9e9e9;
+    color: #555;
+}
+
+/* 전송 버튼 스타일 */
+.form-container button {
+    background-color: #4CAF50;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* 전송 버튼 호버 효과 */
+.form-container button:hover {
+    background-color: #45a049;
+}
+
+/* 제목 스타일 */
+.form-container h2 {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* 수정 폼 스타일 */
+.modify-form {
+    width: 90%;
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+}
+
+.modify-form button {
+    padding: 0.8rem;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #ffc107; /* 수정 버튼 색상 */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.modify-form button:hover {
+    background-color: #e0a800;
+}
+
+.button-link {
+    background-color: #007bff;     
+    color: white;                
+    text-decoration: none;       
+    border: none;               
+}
+
+
+.button-link:hover {
+    background-color: #0056b3;
+}
+
+.button-common {
+    padding: 10px 20px;       
+    border-radius: 5px;       
+    font-size: 1rem;          
+    text-align: center;       
+    cursor: pointer;          
+    transition: background-color 0.3s ease; 
+    flex: 1;                 
+    display: inline-flex;     
+    justify-content: center;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+    max-width: 220px; 
+}
+
+.order-details-container {
+    background-color: #ffffff;
+    width: 90%;
+    max-width: 500px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    
+    position: absolute;
+    top: 50%;  
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.order-summary h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.order-summary p {
+    font-size: 1rem;
+    color: #666;
+    margin: 5px 0;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.shop-button {
+    background-color: #4CAF50;
+}
+
+.order-history-button {
+    background-color: #2196F3;
+}
+
+.button:hover {
+    opacity: 0.8;
 }

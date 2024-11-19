@@ -11,7 +11,6 @@ import com.example.shop.Infomation.InfoRepository;
 import com.example.shop.Infomation.Information;
 import com.example.shop.Item.Item;
 import com.example.shop.Item.ItemRepository;
-import com.example.shop.Item.ItemService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BasicController {
     private final ItemRepository itemRepository;
-    private final ItemService itemService;
     private final InfoRepository infoRepository;
 
     // 최근 등록된 물품을 보여주고

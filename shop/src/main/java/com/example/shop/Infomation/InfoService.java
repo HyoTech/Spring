@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.shop.User.UserInfo;
+import com.example.shop.User.UserRepository;
 import com.example.shop.User.MyUserDetailsService.CustomUser;
 
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class InfoService {
     private final InfoRepository infoRepository;
+    private final UserRepository userRepository;
 
     public void infoSaved(@RequestParam("InfoTitle") String InfoTilte, @RequestParam("Writer") String Writer,
             @RequestParam("InfoValue") String InfoValue, @RequestParam("InfoDate") String InfoDate) {
@@ -54,12 +57,13 @@ public class InfoService {
 
     public boolean infoDeleted(Long id, Authentication auth) {
         Optional<Information> result = infoRepository.findById(id);
+        Optional<UserInfo> uInfo = userRepository.findByUserName(auth.getName());
 
         if (result.isPresent()) {
             Information info = result.get();
             CustomUser user = (CustomUser) auth.getPrincipal();
 
-            if (info.getWriter().equals(user.getUsername())) {
+            if (info.getWriter().equals(user.getUsername()) || uInfo.get().getAuthLevel() == 1) {
                 infoRepository.deleteById(id);
                 return true; // 삭제 성공
             }

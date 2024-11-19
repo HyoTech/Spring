@@ -34,7 +34,7 @@
     <div class="comments-list">
         <div class="comment-item" th:each="comment : ${comment}">
             <p><strong th:text="${comment.getUsername}">작성자</strong>: <span th:text="${comment.getContent}"></span></p>
-            <div th:if="${comment.getUsername != null and comment.getUsername == #authentication.name}">
+            <div th:if="${comment.getUsername != null and comment.getUsername == username}">
                 <button class="DelCommentButton">삭제</button>        
             </div>
             <p class="cid" th:text="${comment.getId}" style="display: none;">아이디</p>
@@ -69,21 +69,21 @@
     delButtons.forEach(function(delButton) {
         var id = delButton.closest('.comment-item').querySelector('.cid').textContent;
 
-        console.log(id);
-
         delButton.addEventListener('click', function(e) {
             e.preventDefault();
-            
-            fetch(`/delComm/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
-            .then(response => response.text())
-            .then(result => {
-                window.location.href = '/list/page/1';
-            });
+
+            if (confirm("정말로 삭제하시겠습니까?")) {
+                fetch(`/delComm/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.text())
+                .then(result => {
+                  window.location.href = '/list/page/1';
+                });
+            }
         });
     });
   </script>

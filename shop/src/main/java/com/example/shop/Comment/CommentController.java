@@ -34,7 +34,7 @@ public class CommentController {
             @RequestParam("parentid") long parentid,
             @RequestParam("parentcategory") long parentcategory) {
         commentService.infoCommentSaved(username, comment, parentid, parentcategory);
-        return "redirect:/info";
+        return "redirect:/list/infopage/1";
     }
 
     // 댓글 삭제기능

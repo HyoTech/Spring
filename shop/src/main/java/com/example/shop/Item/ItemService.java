@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.shop.Infomation.InfoRepository;
 import com.example.shop.Infomation.Information;
+import com.example.shop.User.UserInfo;
+import com.example.shop.User.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class ItemService {
     private final ItemRepository itemRepository;
     private final InfoRepository infoRepository;
+    private final UserRepository userRepository;
     private final S3Service s3Service;
 
     // 상품 보여주는 기능
@@ -41,13 +44,16 @@ public class ItemService {
     }
 
     // 상품입력 기능
-    public void addItem(String title, Integer price, String writer, String image) {
-        Item newItem = new Item();
-        newItem.setProductName(title);
-        newItem.setPrice(price);
-        newItem.setWriter(writer);
-        newItem.setImgurl(image);
-        itemRepository.save(newItem);
+    public void addItem(String title, Integer price, String writer, String image, Authentication auth) {
+        Optional<UserInfo> result = userRepository.findByUserName(auth.getName());
+        if (result.get().getAuthLevel() == 1 || result.get().getAuthLevel() == 2) {
+            Item newItem = new Item();
+            newItem.setProductName(title);
+            newItem.setPrice(price);
+            newItem.setWriter(writer);
+            newItem.setImgurl(image);
+            itemRepository.save(newItem);
+        }
     }
 
     // 상품 상세페이지 보여주기
@@ -77,10 +83,9 @@ public class ItemService {
     @Transactional
     public void modItem(@PathVariable("id") long id, String title, Integer price, String image, String oldImageUrl) {
         String[] oldUrl = oldImageUrl.split("com/");
-        String resultUrl = oldUrl.length > 1 ? oldUrl[1] : ""; // 예외처리
+        String resultUrl = oldUrl.length > 1 ? oldUrl[1] : "";
 
         Item item = itemRepository.findById(id).orElseThrow(() -> {
-            // IllegalArgumentException 예외 처리
             throw new IllegalArgumentException("해당하는 상품이 없습니다 id : " + id);
         });
 
@@ -104,8 +109,11 @@ public class ItemService {
 
     // 상품삭제기능 ID를 통해 행삭제
     public boolean DeItem(@PathVariable("id") Long id, Authentication auth) {
+        Optional<UserInfo> result = userRepository.findByUserName(auth.getName());
         Optional<Item> item = itemRepository.findById(id);
-        if (item.isPresent() && item.get().getWriter().equals(auth.getName())) {
+
+        if (item.isPresent()
+                && (item.get().getWriter().equals(result.get().getUserName()) || result.get().getAuthLevel() == 1)) {
             itemRepository.deleteById(id);
             return true;
         }

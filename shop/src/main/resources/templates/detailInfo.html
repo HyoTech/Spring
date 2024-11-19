@@ -45,7 +45,7 @@
     <div class="comments-list">
         <div class="comment-item" th:each="comment : ${comment}">
             <p><strong th:text="${comment.getUsername}">작성자</strong>: <span th:text="${comment.getContent}"></span></p>
-            <div th:if="${comment.getUsername != null and comment.getUsername == #authentication.name}">
+            <div th:if="${comment.getUsername != null and comment.getUsername == username}">
                 <button class="DelCommentButton">삭제</button>        
             </div>
             <p class="cid" th:text="${comment.getId}" style="display: none;">아이디</p>
@@ -80,32 +80,10 @@
         deleteBtn.addEventListener('click', function(e) {
         e.preventDefault();
 
-        var infoId = document.querySelector('.iid').textContent;
+        if (confirm("정말로 삭제하시겠습니까?")) {
+            var infoId = document.querySelector('.iid').textContent;
 
-        fetch(`/deleteInfo/${infoId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        .then(response => response.text())
-        .then(result => {
-            window.location.href = '/info';
-            });
-        });
-    }
-
-    var delCommentButtons = document.querySelectorAll('.DelCommentButton');
-    delCommentButtons.forEach(function(delButton) {
-    var cidElement = delButton.closest('.comment-item').querySelector('.cid');
-    
-    if (cidElement) {
-        var commentId = cidElement.textContent;
-
-        delButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            fetch(`/delComm/${commentId}`, {
+            fetch(`/deleteInfo/${infoId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -114,8 +92,34 @@
             .then(response => response.text())
             .then(result => {
                 window.location.href = '/info';
-                });
             });
+        }
+    });
+    }
+
+    var delCommentButtons = document.querySelectorAll('.DelCommentButton');
+    delCommentButtons.forEach(function(delButton) {
+    var cidElement = delButton.closest('.comment-item').querySelector('.cid');
+
+    if (cidElement) {
+        var commentId = cidElement.textContent;
+
+        delButton.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        if (confirm("정말로 삭제하시겠습니까?")) {
+            fetch(`/delComm/${commentId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.text())
+            .then(result => {
+                window.location.href = '/list/infopage/1';
+                });
+            }
+        });
         }
     });
     </script>
